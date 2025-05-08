@@ -1,4 +1,5 @@
 ivanG, jackieZ, chrisL, abidurR -- 2025-05-07
 - design doc changes:
   - some clarity on intended features in place
-  - abc
+  - minor missing components in our descriptions (css, js)
+  - overall, a little more elaboration and detail on some componenets, to create a more reflective design doc, that explains our vision better
