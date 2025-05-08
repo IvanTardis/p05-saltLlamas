@@ -1,0 +1,4 @@
+ivanG, jackieZ, chrisL, abidurR -- 2025-05-07
+- design doc changes:
+  - some clarity on intended features in place
+  - abc
