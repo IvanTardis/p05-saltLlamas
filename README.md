@@ -2,10 +2,13 @@
 ## Roster
 Abidur:
 -CSS (Tailwind), HTML
+
 Christopher:
 -HTML, Login/Logout, Flask/Python
+
 Ivan: PM
 -Flask/Python, Game code, Database
+
 Jackie:
 -Javascript
 
