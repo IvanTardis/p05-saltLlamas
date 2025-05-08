@@ -1,16 +1,16 @@
 # p05 by Salty Llamas
 ## Roster
 Abidur:
--CSS (Tailwind), HTML
+CSS (Tailwind), HTML
 
 Christopher:
--HTML, Login/Logout, Flask/Python
+HTML, Login/Logout, Flask/Python
 
 Ivan: PM
--Flask/Python, Game code, Database
+Flask/Python, Game code, Database
 
 Jackie:
--Javascript
+Javascript
 
 
 ## Description
