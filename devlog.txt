@@ -9,6 +9,11 @@ ivanG, abidurR -- 2025-05-11
 - file structure and base files are being put into place
 - complying with deadlines (requirements, install guide, readme, etc)
 
-ivanG -- 2025-05-13
+ivanG -- 2025-05-13 11:47
 - working on registering users
 - fitting together database with main py code
+
+ivaG -- 2025-05-13 16:55
+- fixed registering and all related aspects
+- created logging in and authenticating
+- modified db file for cleaner authentication
