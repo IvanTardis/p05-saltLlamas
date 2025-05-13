@@ -3,8 +3,36 @@
   <head>
     <meta charset="utf-8">
     <title>Salty Llamas Site</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+      .screen{
+        position: absolute;
+        border: 2px solid white;
+        width: 100%;
+        height: 75%;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        background: white;
+      }
+    </style>
   </head>
-  <body>
-    <h1>Hello, hello</h1>
+  <body class='bg-black'>
+    <div>
+      <h1 class='text-white'>Devo Trail</h1>
+
+    <ul class="text-white">
+      <li>Start</li>
+      <li>Register</li>
+      <li>Login</li>
+    </ul>
+
+    <!-- <image src="../static/images/homepage.jpg"></image> -->
+    </div>
+
+    <canvas class="screen"></canvas>
+
+
+        <script src="../static/js/base.js"></script>
   </body>
 </html>
