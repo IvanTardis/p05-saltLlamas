@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, random
 
 def build():
     database = sqlite3.connect("rest.db")
@@ -30,11 +30,12 @@ def createUser(username, password):
     c,db = connect()
     matching = c.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchall()
     if (len(matching) == 0):
-        c.execute("INSERT INTO users(username, password, points, packs, cards, pfp) VALUES(?, ?, ?, ?, ?, ?)", (username, password, 0, 0, 0, ""))
+        print("NO MATCH")
+        c.execute("INSERT INTO users(username, password, highScore, pfp, userID) VALUES(?, ?, ?, ?, ?)", (username, password, 0, "", int(1000000000*random.random())))
         close(db)
-        return 0
+        return 1
     close(db)
-    return 1
+    return 0
 
 def getHighScore(ID):
     c,db = connect()

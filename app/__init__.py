@@ -32,7 +32,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        if register_user(email, password):
+        if createUser(email, password):
             session['user'] = email
             return redirect(url_for('home'))
         else:
