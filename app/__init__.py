@@ -24,7 +24,16 @@ def home():
 
 @app.route(("/login") , methods=['GET', 'POST'])
 def login():
-    return 0
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        if auth(username, password):
+            session['user'] = username
+            return redirect(url_for('home'))
+        else:
+            flash("Invalid email or password. Please try again.", "danger")
+    return render_template('login.html')
 
 @app.route(("/register") , methods=['GET', 'POST'])
 def register():

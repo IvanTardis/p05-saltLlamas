@@ -20,9 +20,9 @@ def close(db):
     db.commit()
     db.close()
 
-def auth(username):
+def auth(username, password):
     c,db = connect()
-    info = c.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone() #Finds user's row based on the entered username
+    info = c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password,)).fetchone() #Finds user's row based on the entered username
     close(db)
     return info
 
