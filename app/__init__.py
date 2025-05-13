@@ -5,7 +5,7 @@ SoftDev
 p05 - Le fin
 time spent: XYZ hrs
 '''
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 from database import *
 
 import sqlite3
@@ -29,11 +29,11 @@ def login():
 @app.route(("/register") , methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
 
-        if createUser(email, password):
-            session['user'] = email
+        if createUser(username, password):
+            session['user'] = username
             return redirect(url_for('home'))
         else:
             flash("User already exists. Try logging in.", "danger")
