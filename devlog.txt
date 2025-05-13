@@ -8,3 +8,7 @@ ivanG, abidurR -- 2025-05-11
 - beginning project setup
 - file structure and base files are being put into place
 - complying with deadlines (requirements, install guide, readme, etc)
+
+ivanG -- 2025-05-13
+- working on registering users
+- fitting together database with main py code
