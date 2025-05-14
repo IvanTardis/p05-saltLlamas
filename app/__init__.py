@@ -37,10 +37,13 @@ def login():
 
 @app.route(("/register") , methods=['GET', 'POST'])
 def register():
+    # print(session['user'])
+    # if session['user'] != NULL:
+    #     session.clear()
+    # else:
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
         if createUser(username, password):
             session['user'] = username
             return redirect(url_for('home'))
@@ -66,7 +69,9 @@ def editing(title):
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
-    return 0
+    session.clear()
+    flash("Logged out successfully", 'info')
+    return redirect("/")
 
 
 if __name__ == "__main__": #false if this file imported as module
