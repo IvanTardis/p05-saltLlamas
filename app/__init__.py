@@ -16,6 +16,11 @@ app = Flask(__name__)    #create Flask object
 # makin' a supa-secret key
 app.secret_key = os.urandom(32)
 
+
+#Global Vars
+currGame = []
+
+
 build()
 
 @app.route(("/"), methods=['GET', 'POST'])
@@ -53,17 +58,21 @@ def register():
     return render_template('register.html')
 
 @app.route("/builder", methods=['GET', 'POST'])
-def blogCreate():
-    return 0
+def builder():
+    if request.method == 'POST':
+        update = request.form['event']
+        currGame.append(update)
+        print(currGame)
+    return render_template('builder.html', events=currGame)
 
 
 @app.route("/play", methods=['GET', 'POST'])
-def blogView(title):
+def play(title):
     return 0
 
 
 @app.route("/profile", methods=['GET', 'POST'])
-def editing(title):
+def profile():
     return 0
 
 
