@@ -13,7 +13,6 @@
         transform: translate(-50%, -50%);
         top: 50%;
         left: 50%;
-        background: white;
       }
     </style>
   </head>
@@ -21,16 +20,24 @@
     <div>
       <h1 class='text-white'>Devo Trail</h1>
 
+      <p>Click on the "Choose File" button to upload a file:</p>
+
+    <form action="/rest.db">
+  <input type="file" id="myFile" name="filename">
+  <input type="submit">
+    </form>
+
     <ul class="text-white">
       <li>Start</li>
       <li>Register</li>
       <li>Login</li>
     </ul>
 
-    <!-- <image src="../static/images/homepage.jpg"></image> -->
+
+    <image id = 'hbg' src="../static/images/homepage.jpg"></image>
     </div>
 
-    <canvas class="screen"></canvas>
+    <canvas class="screen" id="layer1"></canvas>
 
 
         <script src="../static/js/base.js"></script>
