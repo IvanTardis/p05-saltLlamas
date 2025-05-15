@@ -7,6 +7,7 @@ time spent: XYZ hrs
 '''
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 from database import *
+from gameBuilder import *
 
 import sqlite3
 import os
@@ -18,7 +19,7 @@ app.secret_key = os.urandom(32)
 
 
 #Global Vars
-currGame = []
+# currGame = []
 
 
 build()
@@ -59,9 +60,10 @@ def register():
 
 @app.route("/builder", methods=['GET', 'POST'])
 def builder():
+    currGame = getCurrGame()
     if request.method == 'POST':
         update = request.form['event']
-        currGame.append(update)
+        currGame = addEvent(update)
         print(currGame)
     return render_template('builder.html', events=currGame)
 
