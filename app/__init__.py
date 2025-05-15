@@ -61,10 +61,16 @@ def register():
 @app.route("/builder", methods=['GET', 'POST'])
 def builder():
     currGame = getCurrGame()
+    reset = request.form.get('reset')
+    update = request.form.get('event')
+    # print("." + reset + ".")
     if request.method == 'POST':
-        update = request.form['event']
-        currGame = addEvent(update)
-        print(currGame)
+        if reset:
+            reset()
+        elif update:
+            update = request.form['event']
+            # currGame = addEvent(update)
+        # print(reset)
     return render_template('builder.html', events=currGame)
 
 

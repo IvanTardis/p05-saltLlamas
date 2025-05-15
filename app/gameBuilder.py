@@ -15,5 +15,6 @@ def addEvent(input):
 def saveWork():
     return 0
 
-def returnGame(name):
-    return 0
+def reset():
+    clear(currGame)
+    print("Here: " + currGame)

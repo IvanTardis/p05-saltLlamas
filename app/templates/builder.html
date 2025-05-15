@@ -20,7 +20,11 @@
           <label for="events" class="form-label">New Event</label>
           <input type="text" class="form-control" id="event" name="event" required>
       </div>
-      <button type="submit" class="btn btn-success w-100">Add Event</button>
+      <button type="submit" class="btn btn-success btn-lg">Add Event</button>
+  </form>
+
+  <form action="{{ url_for('builder') }}" method="POST"> <!-- form information (login/pasword) -->
+      <button type="submit" class="btn btn-danger btn-lg" id="reset" name="reset">Reset</button>
   </form>
 
   <p>
