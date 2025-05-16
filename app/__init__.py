@@ -62,6 +62,7 @@ def register():
 def builder():
     # print("start")
     currGame = getCurrGame()
+    currPath = getCurrPath()
     # print("here's what I got " + str(currGame))
     reseter = request.form.get('reset')
     update = request.form.get('event')
