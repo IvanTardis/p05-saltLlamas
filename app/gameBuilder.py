@@ -17,5 +17,5 @@ def saveWork():
     return 0
 
 def reset():
-    clear(currGame)
-    print("Here: " + currGame)
+    currGame.clear()
+    # print("Here: " + currGame)

@@ -63,12 +63,12 @@ def builder():
     print("start")
     currGame = getCurrGame()
     print("here's what I got " + str(currGame))
-    reset = request.form.get('reset')
+    reseter = request.form.get('reset')
     update = request.form.get('event')
     # print("." + reset + ".")
     if request.method == 'POST':
         print("top of if")
-        if reset:
+        if reseter:
             print("reset")
             reset()
         elif update:
