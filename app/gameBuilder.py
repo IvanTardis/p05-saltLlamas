@@ -6,6 +6,7 @@ import os
 currGame = []
 
 def getCurrGame():
+    print("In other py file returning this: " + str(currGame))
     return currGame
 
 def addEvent(input):
@@ -16,5 +17,5 @@ def saveWork():
     return 0
 
 def reset():
-    clear(currGame)
-    print("Here: " + currGame)
+    currGame.clear()
+    # print("Here: " + currGame)

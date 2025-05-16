@@ -15,16 +15,15 @@
           <div class="alert alert-{{ category }}">{{ message }}</div>
       {% endfor %}
   {% endwith %}
-  <form action="{{ url_for('builder') }}" method="POST"> <!-- form information (login/pasword) -->
-      <div class="mb-5">
+  <form action="{{ url_for('builder') }}" method="POST">
           <label for="events" class="form-label">New Event</label>
           <input type="text" class="form-control" id="event" name="event" required>
       </div>
       <button type="submit" class="btn btn-success btn-lg">Add Event</button>
   </form>
 
-  <form action="{{ url_for('builder') }}" method="POST"> <!-- form information (login/pasword) -->
-      <button type="submit" class="btn btn-danger btn-lg" id="reset" name="reset">Reset</button>
+  <form action="{{ url_for('builder') }}" method="POST">
+      <button type="submit" class="btn btn-danger btn-lg" id="reset" name="reset" value="reset">Reset</button>
   </form>
 
   <p>
