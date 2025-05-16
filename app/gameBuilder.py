@@ -6,6 +6,7 @@ import os
 currGame = []
 
 def getCurrGame():
+    print("In other py file returning this: " + str(currGame))
     return currGame
 
 def addEvent(input):
