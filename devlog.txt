@@ -2,7 +2,7 @@ ivanG, jackieZ, chrisL, abidurR -- 2025-05-07
 - design doc changes:
   - some clarity on intended features in place
   - minor missing components in our descriptions (css, js)
-  - overall, a little more elaboration and detail on some componenets, to create a more reflective design doc, that explains our vision better; also making the organization of it clearer
+  - overall, a little more elaboration and detail on some components, to create a more reflective design doc, that explains our vision better; also making the organization of it clearer
 
 ivanG, abidurR -- 2025-05-11
 - beginning project setup
@@ -13,7 +13,17 @@ ivanG -- 2025-05-13 11:47
 - working on registering users
 - fitting together database with main py code
 
-ivaG -- 2025-05-13 16:55
+ivanG -- 2025-05-13 16:55
 - fixed registering and all related aspects
 - created logging in and authenticating
 - modified db file for cleaner authentication
+
+ivanG -- 2025-05-15 11:47
+- started with the page where people can customize the game
+- add event mostly working, want to fix bug with logic
+- reset not working
+
+ivanG -- 2025-05-16 11:47
+- reworked add event logic fully and i understand it now
+- reset working fully and beautifully
+- started with destination and start point custom
