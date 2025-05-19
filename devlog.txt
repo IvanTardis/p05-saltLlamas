@@ -27,3 +27,8 @@ ivanG -- 2025-05-16 11:47
 - reworked add event logic fully and i understand it now
 - reset working fully and beautifully
 - started with destination and start point custom
+
+ivanG -- 2025-05-19 11:46
+- continued writing the game builder page
+- users can accurately change the start and end point of their journey
+- other logistical/clarity changes in the code
