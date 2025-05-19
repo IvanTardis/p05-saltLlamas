@@ -19,7 +19,7 @@ app.secret_key = os.urandom(32)
 
 
 #Global Vars
-# currGame = []
+# currEvents = []
 
 
 build()
@@ -61,9 +61,9 @@ def register():
 @app.route("/builder", methods=['GET', 'POST'])
 def builder():
     # print("start")
-    currGame = getCurrGame()
+    currEvents = getCurrEvents()
     currPath = getCurrPath()
-    # print("here's what I got " + str(currGame))
+    # print("here's what I got " + str(currEvents))
     reseter = request.form.get('reset')
     update = request.form.get('event')
     startPoint = request.form.get('start')
@@ -78,11 +78,13 @@ def builder():
             # print("update: " + update)
             update = request.form['event']
             addEvent(update)
-            # currGame = addEvent(update)
+            # currEvents = addEvent(update)
+        elif startPoint or endPoint:
+            changePath(startPoint, endPoint)
         # print("end of if")
         # print(reset)
     # print("VERY end")
-    return render_template('builder.html', events=currGame)
+    return render_template('builder.html', events=currEvents, path=currPath)
 
 
 @app.route("/play", methods=['GET', 'POST'])
