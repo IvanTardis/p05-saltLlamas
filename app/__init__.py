@@ -6,10 +6,10 @@ p05 - Le fin
 time spent: XYZ hrs
 '''
 from flask import Flask, render_template, request, session, redirect, url_for, flash
-from database import auth, createUser, getHighScore
+from database import auth, createUser, getHighScore, build
 import gameBuilder 
 from gamePlayer import game_turn, load_game_state, save_game_state, game_state
-   # Import game logic
+
 
 import sqlite3
 import os
@@ -20,7 +20,7 @@ app = Flask(__name__)    #create Flask object
 app.secret_key = os.urandom(32)
 
 # Initialize database and game setup
-
+build()
 
 # Routes
 @app.route(("/"), methods=['GET', 'POST'])
@@ -143,7 +143,85 @@ def reset_game():
     flash("Game reset successfully.", "success")
     return redirect(url_for("play"))
 
+@app.route("/travel", methods=['POST'])
+def travel_route():
+    load_game_state()
+    response = game_turn("travel")
+    if isinstance(response, str):
+        flash(response, "danger")
+    else:
+        flash("You traveled further along the trail.", "success")
+    return redirect(url_for('play'))
 
+
+@app.route("/hunt", methods=['POST'])
+def hunt_route():
+    load_game_state()
+    response = game_turn("hunt")
+    if isinstance(response, str):
+        flash(response, "danger")
+    else:
+        flash("You successfully hunted for food.", "success")
+    return redirect(url_for('play'))
+
+
+@app.route("/rest", methods=['POST'])
+def rest_route():
+    load_game_state()
+    response = game_turn("rest")
+    if isinstance(response, str):
+        flash(response, "danger")
+    else:
+        flash("You took a day to rest.", "info")
+    return redirect(url_for('play'))
+
+@app.route("/fort", methods=['POST'])
+def fort_route():
+    load_game_state()
+    
+    # Logic for buying supplies at the fort
+    if game_state["money"] >= 50:
+        game_state["foodQuantity"] += 20
+        game_state["money"] -= 50
+        flash("You bought supplies at the fort!", "success")
+    else:
+        flash("Not enough money to buy supplies at the fort.", "danger")
+
+    save_game_state()
+    return redirect(url_for('play'))
+
+@app.route("/blizzard", methods=['POST'])
+def blizzard_route():
+    """ Logic for blizzard events. """
+    load_game_state()
+    game_state["foodQuantity"] -= 30
+    game_state["daysPassed"] += 2
+    flash("A harsh blizzard slowed you down. Lost 30 food and 2 days.", "danger")
+    save_game_state()
+    return redirect(url_for('play'))
+
+@app.route("/mountain", methods=['POST'])
+def mountain_route():
+    """ Logic for mountain events. """
+    load_game_state()
+    game_state["distanceTraveled"] -= 10
+    game_state["oxen"] -= 1
+    flash("You encountered rough terrain in the mountains. Lost 10 miles and 1 ox.", "danger")
+    save_game_state()
+    return redirect(url_for('play'))
+
+@app.route("/riders", methods=['POST'])
+def riders_route():
+    """ Logic for hostile or friendly riders. """
+    load_game_state()
+    if random.random() < 0.5:
+        game_state["foodQuantity"] -= 20
+        flash("Hostile riders stole 20 food.", "danger")
+    else:
+        game_state["foodQuantity"] += 10
+        flash("Friendly riders gave you 10 food.", "success")
+    save_game_state()
+    return redirect(url_for('play'))
 if __name__ == "__main__":
     app.debug = True
     app.run()

@@ -10,6 +10,12 @@
     <div class="container my-5">
         <h1 class="text-center mb-4">Oregon Trail Game</h1>
 
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
         <div class="card mb-4">
             <div class="card-body">
                 <h5>Current Game State:</h5>
@@ -25,10 +31,28 @@
             </div>
         </div>
 
-        <form method="POST">
-            <button name="action" value="travel" class="btn btn-primary mb-2 w-100">Travel</button>
-            <button name="action" value="hunt" class="btn btn-success mb-2 w-100">Hunt</button>
-            <button name="action" value="rest" class="btn btn-warning mb-2 w-100">Rest</button>
+        <form action="{{ url_for('travel_route') }}" method="POST">
+            <button type="submit" class="btn btn-primary mb-2 w-100">Travel</button>
+        </form>
+
+        <form action="{{ url_for('hunt_route') }}" method="POST">
+            <button type="submit" class="btn btn-success mb-2 w-100">Hunt</button>
+        </form>
+
+        <form action="{{ url_for('rest_route') }}" method="POST">
+            <button type="submit" class="btn btn-warning mb-2 w-100">Rest</button>
+        </form>
+
+        <form action="{{ url_for('fort_route') }}" method="POST">
+            <button type="submit" class="btn btn-secondary mb-2 w-100">Visit Fort</button>
+        </form>
+
+        <form action="{{ url_for('mountain_route') }}" method="POST">
+            <button type="submit" class="btn btn-dark mb-2 w-100">Enter Mountains</button>
+        </form>
+
+        <form action="{{ url_for('blizzard_route') }}" method="POST">
+            <button type="submit" class="btn btn-danger mb-2 w-100">Face Blizzard</button>
         </form>
     </div>
 </body>

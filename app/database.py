@@ -27,10 +27,30 @@ def build():
         money INTEGER DEFAULT 700, 
         oxen INTEGER DEFAULT 2, 
         bullets INTEGER DEFAULT 50, 
+        mileage INTEGER DEFAULT 0, 
+        event_counter INTEGER DEFAULT 0,
+        injury BOOLEAN DEFAULT 0,
+        illness BOOLEAN DEFAULT 0,
+        blizzard BOOLEAN DEFAULT 0,
+        fort_flag BOOLEAN DEFAULT 0,
+        south_pass_flag BOOLEAN DEFAULT 0,
         userID INTEGER, 
         FOREIGN KEY (userID) REFERENCES users(userID)
     )
     """)
+
+    # Migration for existing databases
+    try:
+        c.execute("ALTER TABLE stats ADD COLUMN mileage INTEGER DEFAULT 0")
+        c.execute("ALTER TABLE stats ADD COLUMN event_counter INTEGER DEFAULT 0")
+        c.execute("ALTER TABLE stats ADD COLUMN injury BOOLEAN DEFAULT 0")
+        c.execute("ALTER TABLE stats ADD COLUMN illness BOOLEAN DEFAULT 0")
+        c.execute("ALTER TABLE stats ADD COLUMN blizzard BOOLEAN DEFAULT 0")
+        c.execute("ALTER TABLE stats ADD COLUMN fort_flag BOOLEAN DEFAULT 0")
+        c.execute("ALTER TABLE stats ADD COLUMN south_pass_flag BOOLEAN DEFAULT 0")
+    except sqlite3.OperationalError:
+        # Columns already exist, ignore the error
+        pass
 
     database.commit()
     database.close()
@@ -88,3 +108,16 @@ def getHighScore(user_id):
     high_score = c.execute("SELECT highScore FROM users WHERE userID = ?", (user_id,)).fetchone()
     close(db)
     return high_score[0] if high_score else 0
+
+db = sqlite3.connect("rest.db")
+c = db.cursor()
+
+print("== Users Table ==")
+c.execute("PRAGMA table_info(users)")
+print(c.fetchall())
+
+print("\n== Stats Table ==")
+c.execute("PRAGMA table_info(stats)")
+print(c.fetchall())
+
+db.close()
