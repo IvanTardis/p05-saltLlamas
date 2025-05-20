@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oregon Trail Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Oregon Trail Game</h1>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Current Game State:</h5>
+                <ul>
+                    <li>Distance Traveled: {{ game_state.distanceTraveled }} miles</li>
+                    <li>Days Passed: {{ game_state.daysPassed }}</li>
+                    <li>Surviving People: {{ game_state.survivingPeople }}</li>
+                    <li>Food Quantity: {{ game_state.foodQuantity }} units</li>
+                    <li>Money: ${{ game_state.money }}</li>
+                    <li>Oxen: {{ game_state.oxen }}</li>
+                    <li>Bullets: {{ game_state.bullets }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <form action="{{ url_for('travel_route') }}" method="POST">
+            <button type="submit" class="btn btn-primary mb-2 w-100">Travel</button>
+        </form>
+
+        <form action="{{ url_for('hunt_route') }}" method="POST">
+            <button type="submit" class="btn btn-success mb-2 w-100">Hunt</button>
+        </form>
+
+        <form action="{{ url_for('rest_route') }}" method="POST">
+            <button type="submit" class="btn btn-warning mb-2 w-100">Rest</button>
+        </form>
+
+        <form action="{{ url_for('fort_route') }}" method="POST">
+            <button type="submit" class="btn btn-secondary mb-2 w-100">Visit Fort</button>
+        </form>
+
+        <form action="{{ url_for('mountain_route') }}" method="POST">
+            <button type="submit" class="btn btn-dark mb-2 w-100">Enter Mountains</button>
+        </form>
+
+        <form action="{{ url_for('blizzard_route') }}" method="POST">
+            <button type="submit" class="btn btn-danger mb-2 w-100">Face Blizzard</button>
+        </form>
+    </div>
+</body>
+</html>

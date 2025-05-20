@@ -15,6 +15,22 @@
           <div class="alert alert-{{ category }}">{{ message }}</div>
       {% endfor %}
   {% endwith %}
+
+  <!-- Change Start and End Location -->
+  <form action="{{ url_for('builder') }}" method="POST">
+          <label for="start" class="form-label">Start point:</label>
+          <input type="text" class="form-control" id="start" name="start" required>
+          <label for="end" class="form-label">End point:</label>
+          <input type="text" class="form-control" id="end" name="end" required>
+      </div>
+      <button type="submit" class="btn btn-success btn-lg">Change destination</button>
+  </form>
+
+  <p>
+    {{ path }}
+  </p>
+
+  <!-- Adding New events -->
   <form action="{{ url_for('builder') }}" method="POST">
           <label for="events" class="form-label">New Event</label>
           <input type="text" class="form-control" id="event" name="event" required>
@@ -22,6 +38,7 @@
       <button type="submit" class="btn btn-success btn-lg">Add Event</button>
   </form>
 
+  <!-- Reset everything -->
   <form action="{{ url_for('builder') }}" method="POST">
       <button type="submit" class="btn btn-danger btn-lg" id="reset" name="reset" value="reset">Reset</button>
   </form>
