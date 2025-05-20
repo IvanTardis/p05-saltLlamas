@@ -6,95 +6,114 @@ p05 - Le fin
 time spent: XYZ hrs
 '''
 from flask import Flask, render_template, request, session, redirect, url_for, flash
-from database import *
-from gameBuilder import *
+from database import auth, createUser, getHighScore
+import gameBuilder 
+from gamePlayer import game_turn, load_game_state, save_game_state, game_state
+   # Import game logic
 
 import sqlite3
 import os
 
 app = Flask(__name__)    #create Flask object
 
-# makin' a supa-secret key
+# Secret key for sessions
 app.secret_key = os.urandom(32)
 
-
-#Global Vars
-# currEvents = []
+# Initialize database and game setup
 
 
-build()
-
+# Routes
 @app.route(("/"), methods=['GET', 'POST'])
 def home():
-    return render_template( 'home.html')
+    return render_template('home.html')
 
-@app.route(("/login") , methods=['GET', 'POST'])
+
+@app.route(("/login"), methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        user_info = auth(username, password)
 
-        if auth(username, password):
+        if user_info:
             session['user'] = username
+            session['user_id'] = user_info[4]
+            load_game_state()  # Load their game state
+            flash("Login successful!", "success")
             return redirect(url_for('home'))
         else:
-            flash("Invalid email or password. Please try again.", "danger")
+            flash("Invalid username or password. Please try again.", "danger")
     return render_template('login.html')
 
-@app.route(("/register") , methods=['GET', 'POST'])
+
+@app.route(("/register"), methods=['GET', 'POST'])
 def register():
-    # print(session['user'])
-    # if session['user'] != NULL:
-    #     session.clear()
-    # else:
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         if createUser(username, password):
             session['user'] = username
+            flash("Registration successful! You are now logged in.", "success")
             return redirect(url_for('home'))
         else:
             flash("User already exists. Try logging in.", "danger")
-
     return render_template('register.html')
+
 
 @app.route("/builder", methods=['GET', 'POST'])
 def builder():
-    # print("start")
     currEvents = getCurrEvents()
     currPath = getCurrPath()
-    # print("here's what I got " + str(currEvents))
     reseter = request.form.get('reset')
     update = request.form.get('event')
     startPoint = request.form.get('start')
     endPoint = request.form.get('end')
-    # print("." + reset + ".")
+
     if request.method == 'POST':
-        # print("top of if")
         if reseter:
-            # print("reset")
             reset()
         elif update:
-            # print("update: " + update)
-            update = request.form['event']
             addEvent(update)
-            # currEvents = addEvent(update)
         elif startPoint or endPoint:
             changePath(startPoint, endPoint)
-        # print("end of if")
-        # print(reset)
-    # print("VERY end")
+
     return render_template('builder.html', events=currEvents, path=currPath)
 
 
 @app.route("/play", methods=['GET', 'POST'])
-def play(title):
-    return 0
+def play():
+    if 'user' not in session:
+        flash("You need to be logged in to play.", "warning")
+        return redirect(url_for('login'))
+
+    load_game_state()  # Load the game state from DB
+    if request.method == 'POST':
+        action = request.form.get("action")
+        if action == "travel":
+            game_turn()
+        elif action == "hunt":
+            if game_state["bullets"] > 0:
+                game_state["bullets"] -= random.randint(5, 15)
+                game_state["foodQuantity"] += random.randint(10, 50)
+            else:
+                flash("You don't have enough bullets to hunt.", "warning")
+        elif action == "rest":
+            game_state["daysPassed"] += 1
+            game_state["foodQuantity"] -= game_state["survivingPeople"]
+        save_game_state()
+
+    return render_template("play.html", game_state=game_state)
 
 
 @app.route("/profile", methods=['GET', 'POST'])
 def profile():
-    return 0
+    if 'user' not in session:
+        flash("You need to be logged in to view your profile.", "warning")
+        return redirect(url_for('login'))
+
+    user_id = session.get('user_id')
+    user_stats = getHighScore(user_id)
+    return render_template('profile.html', stats=user_stats)
 
 
 @app.route("/logout", methods=['GET', 'POST'])
@@ -104,7 +123,27 @@ def logout():
     return redirect("/")
 
 
-if __name__ == "__main__": #false if this file imported as module
-    #enable debugging, auto-restarting of server when this file is modified
+@app.route("/reset_game")
+def reset_game():
+    if 'user' not in session:
+        flash("You need to be logged in to reset your game.", "warning")
+        return redirect(url_for('login'))
+
+    global game_state
+    game_state = {
+        "distanceTraveled": 0,
+        "daysPassed": 0,
+        "survivingPeople": 5,
+        "foodQuantity": 100,
+        "money": 700,
+        "oxen": 2,
+        "bullets": 50,
+    }
+    save_game_state()
+    flash("Game reset successfully.", "success")
+    return redirect(url_for("play"))
+
+
+if __name__ == "__main__":
     app.debug = True
     app.run()
