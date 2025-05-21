@@ -194,9 +194,13 @@ def fort_route():
 def blizzard_route():
     """ Logic for blizzard events. """
     load_game_state()
-    game_state["foodQuantity"] -= 30
-    game_state["daysPassed"] += 2
-    flash("A harsh blizzard slowed you down. Lost 30 food and 2 days.", "danger")
+    if game_state["foodQuantity"]>=30:
+        game_state["foodQuantity"] -= 30
+        game_state["daysPassed"] += 2
+        flash("A harsh blizzard slowed you down. Lost 30 food and 2 days.", "danger")
+    else:
+        game_state["foodQuantity"] = 0
+        flash("A harsh blizzard slowed you down. You are out of food and starve", "danger")
     save_game_state()
     return redirect(url_for('play'))
 

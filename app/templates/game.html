@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Oregon Trail - Game</title>
+</head>
+<body>
+    <h2>Oregon Trail</h2>
+
+    <form method="POST">
+        <button name="action" value="travel">Travel</button>
+        <button name="action" value="rest">Rest</button>
+        <button name="action" value="hunt">Hunt</button>
+        <button name="action" value="status">Check Status</button>
+    </form>
+
+    <h3>Game Log:</h3>
+    <ul>
+        {% for event in events %}
+            <li>{{ event }}</li>
+        {% endfor %}
+    </ul>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
