@@ -63,9 +63,9 @@ def load_game_state():
         (game_state["distanceTraveled"], game_state["daysPassed"],
          game_state["survivingPeople"],game_state["foodQuantity"],
          game_state["money"], game_state["oxen"], game_state["bullets"],
-         game_state["mileage"], game_state["event_counter"], game_state["injury"],
-         game_state["illness"], game_state["blizzard"], game_state["fort_flag"])
-         = result
+         game_state["mileage"], game_state["event_counter"],
+         game_state["injury"], game_state["illness"], game_state["blizzard"],
+         game_state["fort_flag"]) = result
 
 
 def game_turn(action):

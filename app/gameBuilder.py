@@ -44,9 +44,8 @@ def addEvent(input):
 
 def changePath(start, end):
     print("Changing path")
-    currPath[0] = start
-    currPath[1] = end
-    return currPath
+    currGame["currPath"] = [start, end]
+    return currGame.get("currPath")
 
 def saveWork():
     return 0
