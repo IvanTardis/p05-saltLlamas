@@ -52,7 +52,12 @@ ivanG -- 2025-05-20 11:47
   - Removed unnecessary APIs we won't use anymore
   - Some initial database storage changes to reflect new plans
 
-christopherL -- 2025-05-19 11:07
+christopherL -- 2025-05-21 11:07
 - Python Style Guide Changes:
   - Updated python files to comply with maximum line length
   - Maximum line length is 79 characters b/c standard terminal width shows 80 characters.
+
+ivanG -- 2025-05-21 11:20
+- mostly cleanliness updates
+- planning for overall cleaner organization and functionality
+- fixed a lot of non-loading errors to restore function
