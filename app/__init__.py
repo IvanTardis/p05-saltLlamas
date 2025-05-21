@@ -73,9 +73,9 @@ def builder():
         if reseter:
             reset()
         elif update:
-            addEvent(update)
+            currEvents = addEvent(update)
         elif startPoint or endPoint:
-            changePath(startPoint, endPoint)
+            currPath = changePath(startPoint, endPoint)
 
     return render_template('builder.html', events=currEvents, path=currPath)
 

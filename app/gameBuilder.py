@@ -22,7 +22,7 @@ baseGame = {
 currGame = baseGame.copy()
 
 currEvents = []
-currPath = [None] * 2
+# currPath = [None] * 2
 
 def getCurrEvents():
     # print("In other py file returning this: " + str(currEvents))
@@ -43,7 +43,7 @@ def addEvent(input):
     return currEvents
 
 def changePath(start, end):
-    print("Changing path")
+    print("Changing path to: " + start + end)
     currGame["currPath"] = [start, end]
     return currGame.get("currPath")
 
