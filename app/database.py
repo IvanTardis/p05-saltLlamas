@@ -9,10 +9,10 @@ def build():
     # Create users table
     c.execute("""
     CREATE TABLE IF NOT EXISTS users(
-        username TEXT, 
-        password TEXT, 
-        highScore INTEGER DEFAULT 0, 
-        pfp TEXT, 
+        username TEXT,
+        password TEXT,
+        highScore INTEGER DEFAULT 0,
+        pfp TEXT,
         userID INTEGER PRIMARY KEY AUTOINCREMENT
     )
     """)
@@ -20,21 +20,21 @@ def build():
     # Create game stats table
     c.execute("""
     CREATE TABLE IF NOT EXISTS stats(
-        distanceTraveled INTEGER DEFAULT 0, 
-        daysPassed INTEGER DEFAULT 0, 
-        survivingPeople INTEGER DEFAULT 5, 
-        foodQuantity INTEGER DEFAULT 100, 
-        money INTEGER DEFAULT 700, 
-        oxen INTEGER DEFAULT 2, 
-        bullets INTEGER DEFAULT 50, 
-        mileage INTEGER DEFAULT 0, 
+        distanceTraveled INTEGER DEFAULT 0,
+        daysPassed INTEGER DEFAULT 0,
+        survivingPeople INTEGER DEFAULT 5,
+        foodQuantity INTEGER DEFAULT 100,
+        money INTEGER DEFAULT 700,
+        oxen INTEGER DEFAULT 2,
+        bullets INTEGER DEFAULT 50,
+        mileage INTEGER DEFAULT 0,
         event_counter INTEGER DEFAULT 0,
         injury BOOLEAN DEFAULT 0,
         illness BOOLEAN DEFAULT 0,
         blizzard BOOLEAN DEFAULT 0,
         fort_flag BOOLEAN DEFAULT 0,
         south_pass_flag BOOLEAN DEFAULT 0,
-        userID INTEGER, 
+        userID INTEGER,
         FOREIGN KEY (userID) REFERENCES users(userID)
     )
     """)
@@ -71,7 +71,8 @@ def auth(username, password):
     Authenticate user credentials.
     """
     c, db = connect()
-    user = c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password,)).fetchone()
+    user = c.execute("SELECT * FROM users WHERE username = ? AND password = ?",
+        (username, password,)).fetchone()
     close(db)
     return user
 
@@ -80,10 +81,11 @@ def createUser(username, password):
     Register a new user if username is not taken.
     """
     c, db = connect()
-    existing_user = c.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+    existing_user = c.execute("SELECT * FROM users WHERE username = ?",
+        (username,)).fetchone()
     if not existing_user:
         c.execute("""
-        INSERT INTO users(username, password, highScore, pfp) 
+        INSERT INTO users(username, password, highScore, pfp)
         VALUES(?, ?, ?, ?)
         """, (username, password, 0, "default.png"))
 
@@ -93,7 +95,7 @@ def createUser(username, password):
         c.execute("""
         INSERT INTO stats(userID) VALUES(?)
         """, (user_id,))
-        
+
         db.commit()
         close(db)
         return True
@@ -105,7 +107,8 @@ def getHighScore(user_id):
     Retrieve the high score of the user.
     """
     c, db = connect()
-    high_score = c.execute("SELECT highScore FROM users WHERE userID = ?", (user_id,)).fetchone()
+    high_score = c.execute("SELECT highScore FROM users WHERE userID = ?",
+        (user_id,)).fetchone()
     close(db)
     return high_score[0] if high_score else 0
 

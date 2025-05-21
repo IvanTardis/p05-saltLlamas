@@ -23,6 +23,10 @@ ivanG -- 2025-05-15 11:47
 - add event mostly working, want to fix bug with logic
 - reset not working
 
+christopherL -- 2025-05-16 11:45
+- Created database file
+- Set up basic tables for Oregon Trail game
+
 ivanG -- 2025-05-16 11:47
 - reworked add event logic fully and i understand it now
 - reset working fully and beautifully
@@ -33,10 +37,14 @@ ivanG -- 2025-05-19 11:46
 - users can accurately change the start and end point of their journey
 - other logistical/clarity changes in the code
 
-jackieZ -- 20250-05-19
+jackieZ -- 2025-05-19
 - Fixed login/register
 - Update database
 - Setup up basic Oregon Trail game elements
+
+christopherL -- 2025-05-19 11:47
+- Updated html layout on home page
+- Updated design doc
 
 ivanG -- 2025-05-20 11:47
 - design doc changes:
@@ -44,4 +52,7 @@ ivanG -- 2025-05-20 11:47
   - Removed unnecessary APIs we won't use anymore
   - Some initial database storage changes to reflect new plans
 
-
+christopherL -- 2025-05-19 11:07
+- Python Style Guide Changes:
+  - Updated python files to comply with maximum line length
+  - Maximum line length is 79 characters b/c standard terminal width shows 80 characters.
