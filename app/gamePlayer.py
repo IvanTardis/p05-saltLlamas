@@ -54,8 +54,8 @@ def load_game_state():
     c, db = connect()
     user_id = session.get("user_id", 1)
     result = c.execute("""
-        SELECT distanceTraveled, daysPassed, survivingPeople, foodQuantity, money, oxen, bullets, mileage,
-               event_counter, injury, illness, blizzard, fort_flag
+        SELECT distanceTraveled, daysPassed, survivingPeople, foodQuantity, money,
+        oxen, bullets, mileage, event_counter, injury, illness, blizzard, fort_flag
         FROM stats WHERE userID = ?
     """, (user_id,)).fetchone()
     close(db)
