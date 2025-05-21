@@ -7,7 +7,7 @@ time spent: XYZ hrs
 '''
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 from database import auth, createUser, getHighScore, build
-import gameBuilder 
+from gameBuilder import *
 from gamePlayer import game_turn, load_game_state, save_game_state, game_state
 
 
@@ -178,7 +178,7 @@ def rest_route():
 @app.route("/fort", methods=['POST'])
 def fort_route():
     load_game_state()
-    
+
     # Logic for buying supplies at the fort
     if game_state["money"] >= 50:
         game_state["foodQuantity"] += 20
