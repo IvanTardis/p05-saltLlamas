@@ -3,6 +3,22 @@ from flask import Flask, render_template, request, session, redirect, url_for
 import sqlite3
 import os
 
+baseGame = {
+    "currPath": [None] * 2,
+    "playableCharacters": "",
+    "storeItems": {
+        "food": {
+
+        },
+        "utility": {
+
+        }
+    },
+    "monuments": {
+
+    }
+}
+
 currEvents = []
 currPath = [None] * 2
 
