@@ -58,6 +58,11 @@ def load_game_state():
         oxen, bullets, mileage, event_counter, injury, illness, blizzard, fort_flag
         FROM stats WHERE userID = ?
     """, (user_id,)).fetchone()
+    """
+    As you can see above, we incorporated the Python Style Guide here to limit
+    the length of each line to below 80 characters so that it is readable in
+    standard terminal screens.
+    """
     close(db)
     if result:
         (game_state["distanceTraveled"], game_state["daysPassed"],
