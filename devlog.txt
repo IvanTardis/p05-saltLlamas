@@ -62,7 +62,12 @@ ivanG -- 2025-05-21 11:20
 - planning for overall cleaner organization and functionality
 - fixed a lot of non-loading errors to restore function
 
-christopherL -- 2025-05-22 11:20
-- Lots of formatting aspects of the style guide were applicable to our codebase, specifically concerning imports and string line lengths.
-- Most areas of concern that we had which were included in the Style Guide were appreciated, especially concerning imports.
-- See files e.g. gamePlayer.py and database.py
+ivanG -- 2025-05-22 11:25
+- now is when planning and foresight for builder comes into play
+- adding more concepts/plans to dictionary in builder
+- searched for NGINX and uWSGI guide I used
+
+christopherL -- 2025-05-22 11:35
+- Many aspects of the Python Style Guide were useful for our codebase, specifically those concerning line length and imports.
+- We especially appreciated the Style Guide's content on imports as we were unsure about how to format them.
+- See files such as gamePlayer.py and database.py for implementation. 

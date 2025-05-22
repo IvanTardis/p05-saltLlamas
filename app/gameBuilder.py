@@ -5,7 +5,15 @@ import os
 
 baseGame = {
     "currPath": [None] * 2,
-    "playableCharacters": "",
+    "playableCharacters": {
+        "name": {
+            "health": 0,
+            "money": 0,
+            "extra stats?!?!??!?!?": "",
+            "bonusStat": 1,
+            "luck?!?!?": 0
+        },
+    },
     "storeItems": {
         "food": {
 
