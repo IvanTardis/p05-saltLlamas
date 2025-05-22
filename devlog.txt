@@ -61,3 +61,8 @@ ivanG -- 2025-05-21 11:20
 - mostly cleanliness updates
 - planning for overall cleaner organization and functionality
 - fixed a lot of non-loading errors to restore function
+
+ivanG -- 2025-05-22 11:25
+- now is when planning and foresight for builder comes into play
+- adding more concepts/plans to dictionary in builder
+- searched for NGINX and uWSGI guide I used
