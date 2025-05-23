@@ -4,14 +4,15 @@ import sqlite3
 import os
 
 baseGame = {
+    "currDates": [None] * 2,
     "currPath": [None] * 2,
     "playableCharacters": {
         "name": {
             "health": 0,
             "money": 0,
-            "extra stats?!?!??!?!?": "",
             "bonusStat": 1,
-            "luck?!?!?": 0
+            "luck?!?!?": 0,
+            "extra stats?!?!??!?!?": ""
         },
     },
     "storeItems": {
@@ -19,12 +20,17 @@ baseGame = {
 
         },
         "utility": {
-
+            "bullets": {
+                "weight": 0,
+                "price": 0
+            }
         }
     },
     "monuments": {
 
-    }
+    },
+    "weather": "",
+    "prey": ""
 }
 
 currGame = baseGame.copy()
