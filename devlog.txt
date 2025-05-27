@@ -71,3 +71,7 @@ christopherL -- 2025-05-22 11:35
 - Many aspects of the Python Style Guide were useful for our codebase, specifically those concerning line length and imports.
 - We especially appreciated the Style Guide's content on imports as we were unsure about how to format them.
 - See files such as gamePlayer.py and database.py for implementation. 
+
+abidurR -- 2025-05-27 12:54
+-Achieved parallax effect on home screen using HTML Canvas
+-Started working on image file upload to database
