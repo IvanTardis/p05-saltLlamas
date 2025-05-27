@@ -32,9 +32,14 @@ function animate() {
         }
     });
 
-    ctx.font = "bold italic 20px Arial";
-    ctx.strokeText("The Devo Trail",45,70);
-    
+    ctx.font = "bold 20px Arial";
+    ctx.fillStyle = 'rgb(250, 183, 50)';
+    ctx.textAlign = 'left';
+    ctx.fillText("The Devo Trail",45,70);
+    ctx.fillText("Play", 45, 100)
+    ctx.fillText("Login", 45, 150)
+    ctx.fillText("Settings", 45, 200)
+
     requestAnimationFrame(animate);
 }
 
