@@ -5,53 +5,36 @@
     <title>Salty Llamas Site</title>
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <style>
-      .screen{
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: black;
+      }
+      #game-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+      }
+      #layer1 {
         position: absolute;
-        /* border: 3px solid white; */
-        width: 800px;
-        height: 700px;
-        transform: translate(-50%, -50%);
-        top: 50%;
-        left: 50%;
-        display: inline-block;
+        width: 100%;
+        height: 100%;
+        display: block;
       }
       @import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap');
     </style>
 
-        <image id = 'layer-1' src="../static/images/layer-1.png" hidden></image>
-        <image id = 'layer-2' src="../static/images/layer-2.png" hidden></image>
-        <image id = 'layer-3' src="../static/images/layer-3.png" hidden></image>
-        <image id = 'layer-4' src="../static/images/layer-4.png" hidden></image>
-        <image id = 'layer-5' src="../static/images/layer-5.png" hidden></image>
-        <image id = 'layer-6' src="../static/images/layer-6.png" hidden></image>
-
-
+    <image id='layer-1' src="../static/images/layer-1.png" hidden></image>
+    <image id='layer-2' src="../static/images/layer-2.png" hidden></image>
+    <image id='layer-3' src="../static/images/layer-3.png" hidden></image>
+    <image id='layer-4' src="../static/images/layer-4.png" hidden></image>
+    <image id='layer-5' src="../static/images/layer-5.png" hidden></image>
+    <image id='layer-6' src="../static/images/layer-6.png" hidden></image>
   </head>
-  <body class='bg-black'>
-    <!-- <div>
-      <h1 class='text-white'>Devo Trail</h1>
-
-      <p>Click on the "Choose File" button to upload a file:</p>
-
-    <form action="/rest.db">
-  <input type="file" id="myFile" name="filename">
-  <input type="submit">
-    </form>
-
-    <ul class="text-white">
-      <li>Start</li>
-      <li>Register</li>
-      <li>Login</li>
-    </ul>
-
-
-    <image id = 'hbg' src="../static/images/homepage.jpg"></image>
-    </div> -->
-
-    <canvas class="screen" id="layer1"></canvas>
-    
-    <h1>Hello</h1>
-
-        <script src="../static/js/base.js"></script>
+  <body>
+    <div id="game-container">
+      <canvas id="layer1"></canvas>
+    </div>
+    <script src="../static/js/base.js"></script>
   </body>
 </html>
