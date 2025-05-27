@@ -1,12 +1,13 @@
 const canvas = document.getElementById('layer1');
 const ctx = canvas.getContext('2d');
 
+
 //ordered from back (bottom) to front (top)
 const layers = [
     { img: document.getElementById('layer-5'), speed: 0.01/2, y: 0 },
     { img: document.getElementById('layer-4'), speed: 0.05/2, y: 0 },
     { img: document.getElementById('layer-3'), speed: 0.1/2, y: 0 },
-    { img: document.getElementById('layer-6'), speed: 1.0/2, y: 0 }
+    { img: document.getElementById('layer-6'), speed: 1.0/2, y: 0 },
 ];
 
 const positions = layers.map(() => ({ x1: 0, x2: canvas.width }));
@@ -30,6 +31,9 @@ function animate() {
             pos.x2 = canvas.width;
         }
     });
+
+    ctx.font = "bold italic 20px Arial";
+    ctx.strokeText("The Devo Trail",45,70);
     
     requestAnimationFrame(animate);
 }
