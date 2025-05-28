@@ -51,7 +51,7 @@ def addCharacter(name, health, money, bonus):
     temp["health"] = health
     temp["money"] = money
     temp["bonusStat"] = bonus
-    # currGame.
+    currGame["playableCharacters"][name] = temp
 
 
 def getCurrEvents():
