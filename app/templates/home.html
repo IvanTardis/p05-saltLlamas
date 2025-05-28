@@ -21,6 +21,9 @@
         height: 100%;
         display: block;
       }
+      #file-input {
+        display: none;
+      }
       @import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap');
     </style>
 
@@ -34,6 +37,7 @@
   <body>
     <div id="game-container">
       <canvas id="layer1"></canvas>
+      <input type="file" id="file-input" accept="image/*">
     </div>
     <script src="../static/js/base.js"></script>
   </body>
