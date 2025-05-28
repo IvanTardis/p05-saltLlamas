@@ -75,3 +75,7 @@ christopherL -- 2025-05-22 11:35
 abidurR -- 2025-05-27 12:54
 -Achieved parallax effect on home screen using HTML Canvas
 -Started working on image file upload to database
+
+ivanG -- 2025-05-28 09:24
+- Finished python functionality for adding a new playable character to custom game
+- More planning on how to do food and other customizable elements
