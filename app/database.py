@@ -14,6 +14,10 @@ def build():
         highScore INTEGER DEFAULT 0,
         pfp TEXT,
         userID INTEGER PRIMARY KEY AUTOINCREMENT
+        backgroundImagePath TEXT
+        midgroundImageOnePath TEXT
+        midgroundImageTwoPath TEXT
+        wagonImagePath TEXT
     )
     """)
 
@@ -111,6 +115,46 @@ def getHighScore(user_id):
         (user_id,)).fetchone()
     close(db)
     return high_score[0] if high_score else 0
+
+def getBackgroundImagePath(user_id):
+    """
+    Retrieve the user's backgroundImagePath
+    """
+    c, db = connect()
+    background_image_path = c.execute("SELECT backgroundImagePath FROM users WHERE userID = ?",
+        (user_id,)).fetchone()
+    close(db)
+    return background_image_path[0] if background_image_path else 0
+
+def getMidgroundImageOnePath(user_id):
+    """
+    Retrieve the user's First MidgroundImagePath
+    """
+    c, db = connect()
+    midground_image_one_path = c.execute("SELECT midgroundImageOnePath FROM users WHERE userID = ?",
+        (user_id,)).fetchone()
+    close(db)
+    return midground_image_one_path[0] if midground_image_one_path else 0
+
+def getMidgroundImageTwoPath(user_id):
+    """
+    Retrieve the user's Second MidgroundImagePath
+    """
+    c, db = connect()
+    midground_image_one_path = c.execute("SELECT midgroundImageTwoPath FROM users WHERE userID = ?",
+        (user_id,)).fetchone()
+    close(db)
+    return midground_image_two_path[0] if midground_image_two_path else 0
+
+def getWagonImagePath(user_id):
+    """
+    Retrieve the user's wagonImagePath
+    """
+    c, db = connect()
+    wagon_image_path = c.execute("SELECT wagonImagePath FROM users WHERE userID = ?",
+        (user_id,)).fetchone()
+    close(db)
+    return wagon_image_path[0] if wagon_image_path else 0
 
 db = sqlite3.connect("rest.db")
 c = db.cursor()
