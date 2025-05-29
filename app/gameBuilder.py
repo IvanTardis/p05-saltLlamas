@@ -44,7 +44,7 @@ currGame = baseGame.copy()
 baseCharacter = {
     "health": 0,
     "money": 0,
-    "bonusStat": 1
+    "bonusStat": 0
 }
 
 # danger, search, shop
