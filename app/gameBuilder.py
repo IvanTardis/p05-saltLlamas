@@ -4,25 +4,32 @@ import sqlite3
 import os
 
 baseGame = {
-    "currDates": [None] * 2,
+    "startDate": 0,
     "currPath": [None] * 2,
     "playableCharacters": {
         "name": {
             "health": 0,
             "money": 0,
             "bonusStat": 1,
-            "luck?!?!?": 0,
-            "extra stats?!?!??!?!?": ""
         },
     },
     "storeItems": {
         "food": {
-
+            "base": {
+                "weight": 0,
+                "price": 0
+            }
         },
         "utility": {
             "bullets": {
                 "weight": 0,
                 "price": 0
+            }
+        }
+        "transportation": {
+            "ox": {
+                "speed": 0,
+                "health": 0
             }
         }
     },
@@ -37,11 +44,10 @@ currGame = baseGame.copy()
 baseCharacter = {
     "health": 0,
     "money": 0,
-    "bonusStat": 1,
-    "luck?!?!?": 0,
-    "extra stats?!?!??!?!?": ""
+    "bonusStat": 1
 }
 
+# danger, search, shop
 
 currEvents = []
 # currPath = [None] * 2
@@ -71,6 +77,10 @@ def getEndPt():
 def addEvent(input):
     currEvents.append(input)
     return currEvents
+
+def changeStartDate(input):
+    currGame["startDate"] = input
+    return currGame["startDate"]
 
 def changePath(start, end):
     print("Changing path to: " + start + end)
