@@ -70,7 +70,7 @@ ivanG -- 2025-05-22 11:25
 christopherL -- 2025-05-22 11:35
 - Many aspects of the Python Style Guide were useful for our codebase, specifically those concerning line length and imports.
 - We especially appreciated the Style Guide's content on imports as we were unsure about how to format them.
-- See files such as gamePlayer.py and database.py for implementation. 
+- See files such as gamePlayer.py and database.py for implementation.
 
 abidurR -- 2025-05-27 12:54
 -Achieved parallax effect on home screen using HTML Canvas
@@ -79,3 +79,7 @@ abidurR -- 2025-05-27 12:54
 ivanG -- 2025-05-28 09:24
 - Finished python functionality for adding a new playable character to custom game
 - More planning on how to do food and other customizable elements
+
+ivanG -- 2025-05-29 11:46
+- Cleaning the customizable builder python functionality
+- Hoping to get a base game integrated with the play feature soon
