@@ -82,6 +82,9 @@ def changeStartDate(input):
     currGame["startDate"] = input
     return currGame["startDate"]
 
+def getStartDate():
+    return currGame["startDate"]
+
 def changePath(start, end):
     print("Changing path to: " + start + end)
     currGame["currPath"] = [start, end]

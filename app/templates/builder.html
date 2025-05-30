@@ -16,12 +16,20 @@
       {% endfor %}
   {% endwith %}
 
+  <!-- Setting Start Date -->
+  <form action="{{ url_for('builder') }}" method="POST">
+          <label for="events" class="form-label">Choose Journey's Start Date</label>
+          <input type="date" class="form-control" id="startDate" name="startDate" placeholder={{ startDate }}required>
+      </div>
+      <button type="submit" class="btn btn-success btn-lg">Set Date</button>
+  </form>
+
   <!-- Change Start and End Location -->
   <form action="{{ url_for('builder') }}" method="POST">
           <label for="start" class="form-label">Start point:</label>
-          <input type="text" class="form-control" id="start" name="start" required>
+          <input type="text" class="form-control" id="start" name="start" placeholder={{ startPoint }} required>
           <label for="end" class="form-label">End point:</label>
-          <input type="text" class="form-control" id="end" name="end" required>
+          <input type="text" class="form-control" id="end" name="end" placeholder={{ endPoint }} required>
       </div>
       <button type="submit" class="btn btn-success btn-lg">Change destination</button>
   </form>

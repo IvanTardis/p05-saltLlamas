@@ -64,10 +64,12 @@ def register():
 def builder():
     currEvents = getCurrEvents()
     currPath = getCurrPath()
+    currStartDate = getStartDate()
     reseter = request.form.get('reset')
     update = request.form.get('event')
     startPoint = request.form.get('start')
     endPoint = request.form.get('end')
+    startDate = request.form.get('startDate')
 
     if request.method == 'POST':
         if reseter:
@@ -76,8 +78,12 @@ def builder():
             currEvents = addEvent(update)
         elif startPoint or endPoint:
             currPath = changePath(startPoint, endPoint)
+        elif startDate:
+            print(startDate)
+            currStartDate = changeStartDate(startDate)
 
-    return render_template('builder.html', events=currEvents, path=currPath)
+    return render_template('builder.html', events=currEvents, path=currPath,
+        startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate)
 
 
 @app.route("/play", methods=['GET', 'POST'])
