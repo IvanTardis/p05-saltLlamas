@@ -13,10 +13,10 @@ def build():
         password TEXT,
         highScore INTEGER DEFAULT 0,
         pfp TEXT,
-        userID INTEGER PRIMARY KEY AUTOINCREMENT
-        backgroundImagePath TEXT
-        midgroundImageOnePath TEXT
-        midgroundImageTwoPath TEXT
+        userID INTEGER PRIMARY KEY AUTOINCREMENT,
+        backgroundImagePath TEXT,
+        midgroundImageOnePath TEXT,
+        midgroundImageTwoPath TEXT,
         wagonImagePath TEXT
     )
     """)

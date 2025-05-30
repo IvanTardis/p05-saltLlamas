@@ -25,7 +25,7 @@ baseGame = {
                 "weight": 0,
                 "price": 0
             }
-        }
+        },
         "transportation": {
             "ox": {
                 "speed": 0,
