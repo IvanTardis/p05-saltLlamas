@@ -48,10 +48,22 @@ baseCharacter = {
     "bonusStat": 0
 }
 
+baseMonument = {
+    "type": "",
+}
+
 # danger, search, shop
 
 currEvents = []
 # currPath = [None] * 2
+
+def addMonument(name, type):
+    temp = baseMonument.copy()
+    temp['type'] = type
+    currGame["monuments"][name] = temp
+
+def getMonuments():
+    return currGame.get("monuments")
 
 def addCharacter(name, description, health, money, bonus):
     temp = baseCharacter.copy()

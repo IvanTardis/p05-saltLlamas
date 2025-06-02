@@ -76,8 +76,11 @@ def builder():
     startingHealth = request.form.get('startingHealth')
     startingBalance = request.form.get('startingBalance')
     bonusStat = request.form.get('bonusStat')
-
     currCharacters = getCharacters()
+
+    monumentName = request.form.get('monumentName')
+    monumentType = request.form.get('monumentType')
+    currMonuments = getMonuments()
 
     if request.method == 'POST':
         if reseter:
@@ -92,10 +95,12 @@ def builder():
         elif characterName:
             addCharacter(characterName, description, startingHealth,
                 startingBalance, bonusStat)
+        elif monumentName:
+            addMonument(monumentName, monumentType)
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
-        characters=currCharacters)
+        characters=currCharacters, monuments=currMonuments)
 
 
 @app.route("/play", methods=['GET', 'POST'])

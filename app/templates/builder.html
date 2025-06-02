@@ -57,6 +57,24 @@
 
   <p> {{ characters }} </p>
 
+
+  <!-- Creating monuments along the journey -->
+  <form action="{{ url_for('builder') }}" method="POST">
+          <b><label for="monuments" class="form-label">New Monument</label></b><br>
+          <label for="monuments" class="form-label">What is it called: </label>
+          <input type="text" class="form-control" id="monumentName" name="monumentName" required>
+          <label for="monuments" class="form-label">What will it's purpose be: </label>
+          <select name="monumentType" id="monumentType" class="form-control" required>
+            <option value="danger">Dangerous Obstacle</option>
+            <option value="loot">Place to explore and find stuff</option>
+            <option value="shop">A shop-type to stock up on supplies</option>
+          </select>
+      </div>
+      <button type="submit" class="btn btn-success btn-lg">Add Monument</button>
+  </form>
+<p>{{ monuments }}</p>
+
+
   <!-- Adding New events -->
   <form action="{{ url_for('builder') }}" method="POST">
           <label for="events" class="form-label">New Event</label>
