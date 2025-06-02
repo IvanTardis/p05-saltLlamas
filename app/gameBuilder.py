@@ -106,6 +106,9 @@ def changePath(start, end):
     currGame["currPath"] = [start, end]
     return currGame.get("currPath")
 
+def getGame():
+    return currGame
+
 def saveWork():
     return 0
 

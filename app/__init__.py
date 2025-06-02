@@ -82,6 +82,8 @@ def builder():
     monumentType = request.form.get('monumentType')
     currMonuments = getMonuments()
 
+    fullGame = getGame()
+
     if request.method == 'POST':
         if reseter:
             reset()
@@ -100,7 +102,7 @@ def builder():
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
-        characters=currCharacters, monuments=currMonuments)
+        characters=currCharacters, monuments=currMonuments, game=fullGame)
 
 
 @app.route("/play", methods=['GET', 'POST'])
