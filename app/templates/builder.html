@@ -38,13 +38,15 @@
     {{ path }}
   </p>
 
-  <!-- Setting Start Date -->
+  <!-- Adding new characters -->
   <form action="{{ url_for('builder') }}" method="POST">
           <b><label for="character" class="form-label">Create a New Playable Character</label></b>
           <br><label for="events" class="form-label">Add a name: </label>
           <input type="text" class="form-control" id="characterName" name="characterName" required>
           <label for="events" class="form-label">A description of who they are:</label>
           <input type="text" class="form-control" id="description" name="description" required>
+          <label for="events" class="form-label">Starting amount of health: </label>
+          <input type="number" class="form-control" id="startingHealth" name="startingHealth" required>
           <label for="events" class="form-label">Starting amount of Money $: </label>
           <input type="number" class="form-control" id="startingBalance" name="startingBalance" required>
           <label for="events" class="form-label">By what do we multiply their points total (the harder they are to start with, the higher this should be): </label>
@@ -52,6 +54,8 @@
       </div>
       <button type="submit" class="btn btn-success btn-lg">Add character</button>
   </form>
+
+  <p> {{ characters }} </p>
 
   <!-- Adding New events -->
   <form action="{{ url_for('builder') }}" method="POST">

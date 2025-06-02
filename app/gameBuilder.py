@@ -42,6 +42,7 @@ baseGame = {
 
 currGame = baseGame.copy()
 baseCharacter = {
+    "description": "",
     "health": 0,
     "money": 0,
     "bonusStat": 0
@@ -52,13 +53,16 @@ baseCharacter = {
 currEvents = []
 # currPath = [None] * 2
 
-def addCharacter(name, health, money, bonus):
+def addCharacter(name, description, health, money, bonus):
     temp = baseCharacter.copy()
+    temp["description"] = description
     temp["health"] = health
     temp["money"] = money
     temp["bonusStat"] = bonus
     currGame["playableCharacters"][name] = temp
 
+def getCharacters():
+    return currGame.get("playableCharacters")
 
 def getCurrEvents():
     # print("In other py file returning this: " + str(currEvents))
