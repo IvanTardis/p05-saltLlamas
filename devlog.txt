@@ -83,3 +83,13 @@ ivanG -- 2025-05-28 09:24
 ivanG -- 2025-05-29 11:46
 - Cleaning the customizable builder python functionality
 - Hoping to get a base game integrated with the play feature soon
+
+ivanG -- 2025-05-30
+- Continued with customization features
+- Users can change the start date of their journeys
+- Other general bug fixing
+
+ivanG -- 2025-06-02
+- Continued adding customization
+- User can add base characters
+- Monuments with different kinds added to custom
