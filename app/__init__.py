@@ -240,6 +240,30 @@ def profile():
     user_stats = getHighScore(user_id)
     return render_template('profile.html', stats=user_stats)
 
+@app.route("/upload-image", methods = ['POST'])
+def upload_image():
+    image_file = request.files['image']
+    image_type = request.form['type']
+
+    if not image_file:
+        return jsonify({"error": "No image provided"}), 400
+
+    # Save image
+    image_path = os.path.join("uploads", image_file.filename)
+    image_file.save(image_path)
+
+    # Call corresponding function
+    if image_type == "background":
+        createBackgroundImage(image_path)
+    elif image_type == "midground1":
+        createMidgroundImageOne(image_path)
+    elif image_type == "midground2":
+        createMidgroundImageTwo(image_path)
+    elif image_type == "wagon":
+        createWagonImage(image_path)
+    
+    return jsonify({"message": "Image uploaded", "path": image_path})
+
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():

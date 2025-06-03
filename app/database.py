@@ -116,6 +116,9 @@ def getHighScore(user_id):
     close(db)
     return high_score[0] if high_score else 0
 
+if __name__ == '__main__':
+    app.run(debug=True)
+
 def createBackgroundImage(path):
     """Create background image path for a user"""
     c, db = connect()

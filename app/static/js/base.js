@@ -59,19 +59,43 @@ function resizeCanvas() {
     });
 }
 
-function handleFileUpload(event) {
+function handleFileUpload(event){
     const file = event.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
             layers[selectedLayerIndex].img = img;
+            const fileName = file.name.toLowerCase();
+            let imageType;
+            if (selectedLayerIndex == 0) {
+                imageType = "background";
+            } else if (selectedLayerIndex == 1) {
+                imageType = "midground1";
+            } else if (selectedLayerIndex == 2) {
+                imageType = "midground2";
+            } else if (selectedLayerIndex == 3) {
+                imageType = "wagon";
+            }
+            sendImageToDatabase(file, imageType);
         };
         img.src = e.target.result;
     };
     reader.readAsDataURL(file);
+}
+
+function sendImageToDatabase(file, imageType){
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("type", imageType);
+    fetch("/upload-image", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => console.log("Image uploaded successfully:", data))
+    .catch(error => console.error("Error uploading image:", error));
 }
 
 function drawMenu() {
