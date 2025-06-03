@@ -13,7 +13,7 @@
 </head>
 <body class="bg-black text-light">
   <div class="container my-5">
-    <!-- Flash Messages -->
+
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
@@ -25,7 +25,6 @@
       {% endif %}
     {% endwith %}
 
-    <!-- Current Game State Card -->
     <div class="card mb-4 bg-dark text-light">
       <div class="card-body">
         <h5 class="card-title">Current Game State</h5>
@@ -61,7 +60,7 @@
       </div>
     </div>
 
-    <!-- Action Buttons: all post back to /play -->
+
     <div class="row g-2">
       <div class="col-6 col-md-3">
         <form method="POST" action="{{ url_for('play') }}">

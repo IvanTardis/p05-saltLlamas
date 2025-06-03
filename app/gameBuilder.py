@@ -42,9 +42,14 @@ baseGame = {
 
 currGame = baseGame.copy()
 baseCharacter = {
+    "description": "",
     "health": 0,
     "money": 0,
     "bonusStat": 0
+}
+
+baseMonument = {
+    "type": "",
 }
 
 # danger, search, shop
@@ -52,13 +57,24 @@ baseCharacter = {
 currEvents = []
 # currPath = [None] * 2
 
-def addCharacter(name, health, money, bonus):
+def addMonument(name, type):
+    temp = baseMonument.copy()
+    temp['type'] = type
+    currGame["monuments"][name] = temp
+
+def getMonuments():
+    return currGame.get("monuments")
+
+def addCharacter(name, description, health, money, bonus):
     temp = baseCharacter.copy()
+    temp["description"] = description
     temp["health"] = health
     temp["money"] = money
     temp["bonusStat"] = bonus
     currGame["playableCharacters"][name] = temp
 
+def getCharacters():
+    return currGame.get("playableCharacters")
 
 def getCurrEvents():
     # print("In other py file returning this: " + str(currEvents))
@@ -89,6 +105,9 @@ def changePath(start, end):
     print("Changing path to: " + start + end)
     currGame["currPath"] = [start, end]
     return currGame.get("currPath")
+
+def getGame():
+    return currGame
 
 def saveWork():
     return 0
