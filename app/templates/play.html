@@ -10,12 +10,23 @@
      <div id="game-container" class="bg-white position=relative width=100vw height=100vh">
       <canvas id="layer1" class ="position=absolute width=100% height=100% display=block"></canvas>
     </div>
+
+
+    <image id='layer-1' src="../static/images/layer-1.png" hidden></image>
+    <image id='layer-2' src="../static/images/layer-2.png" hidden></image>
+    <image id='layer-3' src="../static/images/layer-3.png" hidden></image>
+    <image id='layer-4' src="../static/images/layer-4.png" hidden></image>
+
     <div class="container my-5">
         {% with messages = get_flashed_messages(with_categories=True) %}
             {% for category, message in messages %}
                 <div class="alert alert-{{ category }}">{{ message }}</div>
             {% endfor %}
         {% endwith %}
+
+    <div>
+        <h1 class="text-center text-white bg-black">Press ENTER to size up the situation</h1>
+    </div>
 
         <div class="card mb-4">
             <div class="card-body">
@@ -32,7 +43,11 @@
             </div>
         </div>
 
-        <form action="{{ url_for('travel_route') }}" method="POST">
+        <div>
+            <h1 class="text-white text-center">Press SPACE BAR to continue</h1>
+        </div>
+
+        <!-- <form action="{{ url_for('travel_route') }}" method="POST">
             <button type="submit" class="btn btn-primary mb-2 w-100">Travel</button>
         </form>
 
@@ -54,7 +69,7 @@
 
         <form action="{{ url_for('blizzard_route') }}" method="POST">
             <button type="submit" class="btn btn-danger mb-2 w-100">Face Blizzard</button>
-        </form>
+        </form> -->
     </div>
     <script src="../static/js/game.js"></script>
 </body>
