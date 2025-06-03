@@ -82,6 +82,11 @@ def builder():
     monumentType = request.form.get('monumentType')
     currMonuments = getMonuments()
 
+    backgroundImage = request.form.get('backgroundImage')
+    midgroundImageOne = request.form.get('midgroundImageOne')
+    midgroundImageTwo = request.form.get('midgroundImageTwo')
+    foregroundImage = request.form.get('foregroundImage')
+
     fullGame = getGame()
 
     if request.method == 'POST':
