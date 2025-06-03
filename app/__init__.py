@@ -118,27 +118,127 @@ def builder():
         characters=currCharacters, monuments=currMonuments, game=fullGame)
 
 
-@app.route("/play", methods=['GET', 'POST'])
-def play():
-    if 'user' not in session:
-        flash("You need to be logged in to play.", "warning")
-        return redirect(url_for('login'))
+@app.route("/setup", methods=["GET", "POST"])
+def setup():
+    """
+    Initial in‐game setup. User provides:
+      - Occupation (affects starting money & shot skill)
+      - Party name
+      - Up to 5 companion names (optional)
+      - Quantity‐based purchases: oxen, food, ammo belts, clothing sets, misc units
+    Once POSTed, we write all fields into game_state and save_game_state().
+    """
+    if "user_id" not in session:
+        flash("You must log in first.", "warning")
+        return redirect(url_for("login"))
 
-    load_game_state()  # Load the game state from DB
-    if request.method == 'POST':
-        action = request.form.get("action")
-        if action == "travel":
-            game_turn()
-        elif action == "hunt":
-            if game_state["bullets"] > 0:
-                game_state["bullets"] -= random.randint(5, 15)
-                game_state["foodQuantity"] += random.randint(10, 50)
-            else:
-                flash("You don't have enough bullets to hunt.", "warning")
-        elif action == "rest":
-            game_state["daysPassed"] += 1
-            game_state["foodQuantity"] -= game_state["survivingPeople"]
+    load_game_state()
+
+
+    if game_state["shot_skill"] != 0:
+        return redirect(url_for("play"))
+
+    if request.method == "POST":
+
+        occupation = request.form.get("occupation", "")
+        if occupation not in ("banker", "carpenter", "blacksmith", "farmer", "miner"):
+            flash("Please select a valid occupation.", "danger")
+            return render_template("setup.html")
+
+        if occupation == "banker":
+            starting_bonus = 500
+            starting_shot = 1
+        elif occupation == "carpenter":
+            starting_bonus = 300
+            starting_shot = 2
+        elif occupation == "blacksmith":
+            starting_bonus = 200
+            starting_shot = 3
+        elif occupation == "farmer":
+            starting_bonus = 100
+            starting_shot = 4
+        else:  #"miner"
+            starting_bonus = 0
+            starting_shot = 5
+
+
+        party_name = request.form["party_name"].strip()
+        companion1 = request.form.get("companion1", "").strip()
+        companion2 = request.form.get("companion2", "").strip()
+        companion3 = request.form.get("companion3", "").strip()
+        companion4 = request.form.get("companion4", "").strip()
+        companion5 = request.form.get("companion5", "").strip()
+
+        try:
+            oxen_qty = int(request.form["oxen_qty"])
+            food_qty = int(request.form["food_qty"])
+            ammo_belts = int(request.form["ammo_belts"])
+            clothing_sets = int(request.form["clothing_sets"])
+            misc_units = int(request.form["misc_units"])
+        except (ValueError, KeyError):
+            flash("All supply quantities must be integers ≥ 0.", "danger")
+            return render_template("setup.html")
+
+        if any(x < 0 for x in (oxen_qty, food_qty, ammo_belts, clothing_sets, misc_units)):
+            flash("Quantities cannot be negative.", "danger")
+            return render_template("setup.html")
+
+
+        cost_oxen = oxen_qty * 40
+        cost_food = food_qty * 0.5
+        cost_ammo = ammo_belts * 1
+        cost_clothing = clothing_sets * 10
+        cost_misc = misc_units * 5
+
+        total_cost = cost_oxen + cost_food + cost_ammo + cost_clothing + cost_misc
+        starting_money = 700 + starting_bonus
+
+        if total_cost > starting_money:
+            flash(f"You only have ${starting_money:.0f} total. You spent ${total_cost:.0f}.", "danger")
+            return render_template("setup.html")
+
+
+        game_state["party_name"] = party_name or "Unnamed Party"
+
+
+        game_state["money"] = int(starting_money - total_cost)
+        game_state["shot_skill"] = starting_shot
+
+        game_state["oxen_spent"] = cost_oxen
+
+        game_state["food"] = food_qty
+
+        game_state["bullets"] = ammo_belts * 50
+
+        game_state["clothing"] = cost_clothing
+
+        game_state["misc"] = cost_misc
+
         save_game_state()
+        flash("Setup complete! Your journey begins now.", "success")
+        return redirect(url_for("play"))
+
+    return render_template("setup.html")
+
+
+
+@app.route("/play", methods=["GET", "POST"])
+def play():
+    if "user_id" not in session:
+        flash("You must log in to play.", "warning")
+        return redirect(url_for("login"))
+
+    load_game_state()
+    if game_state["shot_skill"] == 0:
+        return redirect(url_for("setup"))
+
+    if request.method == "POST":
+        action = request.form.get("action")
+        if action:
+            msgs = game_turn(action)
+            for m in msgs:
+                flash(m, "info")
+            return redirect(url_for("play"))
 
     return render_template("play.html", game_state=game_state)
 
@@ -161,109 +261,7 @@ def logout():
     return redirect("/")
 
 
-@app.route("/reset_game")
-def reset_game():
-    if 'user' not in session:
-        flash("You need to be logged in to reset your game.", "warning")
-        return redirect(url_for('login'))
 
-    global game_state
-    game_state = {
-        "distanceTraveled": 0,
-        "daysPassed": 0,
-        "survivingPeople": 5,
-        "foodQuantity": 100,
-        "money": 700,
-        "oxen": 2,
-        "bullets": 50,
-    }
-    save_game_state()
-    flash("Game reset successfully.", "success")
-    return redirect(url_for("play"))
-
-@app.route("/travel", methods=['POST'])
-def travel_route():
-    load_game_state()
-    response = game_turn("travel")
-    if isinstance(response, str):
-        flash(response, "danger")
-    else:
-        flash("You traveled further along the trail.", "success")
-    return redirect(url_for('play'))
-
-
-@app.route("/hunt", methods=['POST'])
-def hunt_route():
-    load_game_state()
-    response = game_turn("hunt")
-    if isinstance(response, str):
-        flash(response, "danger")
-    else:
-        flash("You successfully hunted for food.", "success")
-    return redirect(url_for('play'))
-
-
-@app.route("/rest", methods=['POST'])
-def rest_route():
-    load_game_state()
-    response = game_turn("rest")
-    if isinstance(response, str):
-        flash(response, "danger")
-    else:
-        flash("You took a day to rest.", "info")
-    return redirect(url_for('play'))
-
-@app.route("/fort", methods=['POST'])
-def fort_route():
-    load_game_state()
-
-    # Logic for buying supplies at the fort
-    if game_state["money"] >= 50:
-        game_state["foodQuantity"] += 20
-        game_state["money"] -= 50
-        flash("You bought supplies at the fort!", "success")
-    else:
-        flash("Not enough money to buy supplies at the fort.", "danger")
-
-    save_game_state()
-    return redirect(url_for('play'))
-
-@app.route("/blizzard", methods=['POST'])
-def blizzard_route():
-    """ Logic for blizzard events. """
-    load_game_state()
-    if game_state["foodQuantity"]>=30:
-        game_state["foodQuantity"] -= 30
-        game_state["daysPassed"] += 2
-        flash("A harsh blizzard slowed you down. Lost 30 food and 2 days.", "danger")
-    else:
-        game_state["foodQuantity"] = 0
-        flash("A harsh blizzard slowed you down. You are out of food and starve", "danger")
-    save_game_state()
-    return redirect(url_for('play'))
-
-@app.route("/mountain", methods=['POST'])
-def mountain_route():
-    """ Logic for mountain events. """
-    load_game_state()
-    game_state["distanceTraveled"] -= 10
-    game_state["oxen"] -= 1
-    flash("You encountered rough terrain in the mountains. Lost 10 miles and 1 ox.", "danger")
-    save_game_state()
-    return redirect(url_for('play'))
-
-@app.route("/riders", methods=['POST'])
-def riders_route():
-    """ Logic for hostile or friendly riders. """
-    load_game_state()
-    if random.random() < 0.5:
-        game_state["foodQuantity"] -= 20
-        flash("Hostile riders stole 20 food.", "danger")
-    else:
-        game_state["foodQuantity"] += 10
-        flash("Friendly riders gave you 10 food.", "success")
-    save_game_state()
-    return redirect(url_for('play'))
 if __name__ == "__main__":
     app.debug = True
     app.run()
