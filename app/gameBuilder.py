@@ -55,7 +55,20 @@ baseMonument = {
 # danger, search, shop
 
 currEvents = []
+currImages = [None]*4
 # currPath = [None] * 2
+
+def addBack(input):
+    currImages[0] = input
+
+def addMidOne(input):
+    currImages[1] = input
+
+def addMidTwo(input):
+    currImages[2] = input
+
+def addFore(input):
+    currImages[3] = input
 
 def addMonument(name, type):
     temp = baseMonument.copy()

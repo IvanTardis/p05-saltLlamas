@@ -104,6 +104,14 @@ def builder():
                 startingBalance, bonusStat)
         elif monumentName:
             addMonument(monumentName, monumentType)
+        elif backgroundImage:
+            addBack(backgroundImage)
+        elif midgroundImageOne:
+            addBack(midgroundImageOne)
+        elif midgroundImageTwo:
+            addBack(midgroundImageTwo)
+        elif foregroundImage:
+            addBack(foregroundImage)
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
