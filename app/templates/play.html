@@ -11,19 +11,27 @@
     rel="stylesheet"
   />
 </head>
-<body class="bg-black text-light">
-  <div class="container my-5">
+<body class="bg-black">
+     <div id="game-container" class="bg-white position=relative width=100vw height=100vh">
+      <canvas id="layer1" class ="position=absolute width=100% height=100% display=block"></canvas>
+    </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+
+    <image id='layer-1' src="../static/images/layer-1.png" hidden></image>
+    <image id='layer-2' src="../static/images/layer-2.png" hidden></image>
+    <image id='layer-3' src="../static/images/layer-3.png" hidden></image>
+    <image id='layer-4' src="../static/images/layer-4.png" hidden></image>
+
+    <div class="container my-5">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+    <div>
+        <h1 class="text-center text-white bg-black">Press ENTER to size up the situation</h1>
+    </div>
 
     <div class="card mb-4 bg-dark text-light">
       <div class="card-body">
@@ -60,12 +68,16 @@
       </div>
     </div>
 
+        <div>
+            <h1 class="text-white text-center">Press SPACE BAR to continue</h1>
+        </div>
 
-    <div class="row g-2">
-      <div class="col-6 col-md-3">
-        <form method="POST" action="{{ url_for('play') }}">
-          <button type="submit" name="action" value="travel"
-                  class="btn btn-primary w-100">Travel</button>
+        <!-- <form action="{{ url_for('travel_route') }}" method="POST">
+            <button type="submit" class="btn btn-primary mb-2 w-100">Travel</button>
+        </form>
+
+        <form action="{{ url_for('hunt_route') }}" method="POST">
+            <button type="submit" class="btn btn-success mb-2 w-100">Hunt</button>
         </form>
       </div>
       <div class="col-6 col-md-3">
@@ -88,7 +100,10 @@
             {% if game_state.fort_option_flag %}Visit Fort{% else %}Fort Unavailable{% endif %}
           </button>
         </form>
-      </div>
+
+        <form action="{{ url_for('blizzard_route') }}" method="POST">
+            <button type="submit" class="btn btn-danger mb-2 w-100">Face Blizzard</button>
+        </form>
     </div>
   </div>
 
