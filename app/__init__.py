@@ -144,7 +144,7 @@ def setup():
         elif occupation == "farmer":
             starting_bonus = 100
             starting_shot = 4
-        else:  "miner"
+        else:  #"miner"
             starting_bonus = 0
             starting_shot = 5
 
