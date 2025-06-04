@@ -25,7 +25,10 @@ build()
 # Routes
 @app.route(("/"), methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
+    test = "LOGGED IN"
+    if "user_id" not in session:
+        test = "NOT LOGGED IN"
+    return render_template('home.html', test=test)
 
 
 @app.route(("/login"), methods=['GET', 'POST'])
