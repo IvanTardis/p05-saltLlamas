@@ -82,6 +82,9 @@ def builder():
     monumentType = request.form.get('monumentType')
     currMonuments = getMonuments()
 
+    trailLength = request.form.get('trailLength')
+    currDist = getDistance()
+
     backgroundImage = request.form.get('backgroundImage')
     midgroundImageOne = request.form.get('midgroundImageOne')
     midgroundImageTwo = request.form.get('midgroundImageTwo')
@@ -112,10 +115,13 @@ def builder():
             addBack(midgroundImageTwo)
         elif foregroundImage:
             addBack(foregroundImage)
+        elif trailLength:
+            currDist = changeDistance(trailLength)
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
-        characters=currCharacters, monuments=currMonuments, game=fullGame)
+        characters=currCharacters, monuments=currMonuments, game=fullGame,
+        trailLength=currDist)
 
 
 @app.route("/setup", methods=["GET", "POST"])

@@ -38,6 +38,16 @@
     {{ path }}
   </p>
 
+
+  <!-- Change Trail Distance -->
+  <form action="{{ url_for('builder') }}" method="POST">
+          <label for="start" class="form-label">Length of the trail in miles:</label>
+          <input type="number" class="form-control" id="trailLength" name="trailLength" placeholder={{ trailLength }} required>
+          </div>
+      <button type="submit" class="btn btn-success btn-lg">Change distance</button>
+  </form>
+
+
   <!-- Adding new characters -->
   <form action="{{ url_for('builder') }}" method="POST">
           <b><label for="character" class="form-label">Create a New Playable Character</label></b>
