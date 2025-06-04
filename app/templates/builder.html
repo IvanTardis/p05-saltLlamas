@@ -82,11 +82,39 @@
       </div>
       <button type="submit" class="btn btn-success btn-lg">Add Event</button>
   </form>
+<br>
 
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="file" class="form-label">Upload image for background: </label>
+    <input type="file" id="backgroundImage" name="backgroundImage">
+    <input type="submit">
+  </form>
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="file" class="form-label">Upload image for further midground: </label>
+    <input type="file" id="midgroundImageOne" name="midgroundImageOne">
+    <input type="submit">
+  </form>
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="file" class="form-label">Upload image for nearer midground: </label>
+    <input type="file" id="midgroundImageTwo" name="midgroundImageTwo">
+    <input type="submit">
+  </form>
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="file" class="form-label">Upload image for foreground: </label>
+    <input type="file" id="foregroundImage" name="foregroundImage">
+    <input type="submit">
+  </form>
+
+<br>
   <!-- Reset everything -->
   <form action="{{ url_for('builder') }}" method="POST">
       <button type="submit" class="btn btn-danger btn-lg" id="reset" name="reset" value="reset">Reset</button>
   </form>
+
+  <br><br>
+
+
+
 
   <p>
     {{ game }}
