@@ -1,5 +1,13 @@
-from flask import Flask, render_template, request, session, redirect, url_for, flash
-from database import auth, createUser, getHighScore, build
+'''
+Salty Llamas - Ivan Gontchar, Jackie Zeng, Christopher Louie, Abidur Rahman
+SoftDev
+2025-05-08
+p05 - Le fin
+time spent: XYZ hrs
+'''
+from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify
+from database import auth, createUser, getHighScore, build, updateImagePath
+from gameBuilder import *
 from gamePlayer import (
     game_state,
     load_game_state,
@@ -8,6 +16,7 @@ from gamePlayer import (
     game_turn,
     TOTAL_TRAIL
 )
+
 
 import sqlite3
 import os
@@ -60,6 +69,10 @@ def register():
 
 @app.route("/builder", methods=['GET', 'POST'])
 def builder():
+    if "user_id" not in session:
+        flash("You must log in to build a game.", "warning")
+        return redirect(url_for("login"))
+
     currEvents = getCurrEvents()
     currPath = getCurrPath()
     currStartDate = getStartDate()
@@ -272,6 +285,30 @@ def profile():
     user_id = session.get('user_id')
     user_stats = getHighScore(user_id)
     return render_template('profile.html', stats=user_stats)
+
+@app.route("/upload-image", methods=['POST'])
+def upload_image():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 403
+    image_file = request.files.get('image')
+    image_type = request.form.get('type')
+    user_id = session['user_id']
+    if not image_file or not image_type:
+        return jsonify({"error": "Missing image or type"}), 400
+    os.makedirs("uploads", exist_ok=True)
+    filename = f"user{user_id}_{image_type}_{image_file.filename}"
+    image_path = os.path.join("uploads", filename)
+    image_file.save(image_path)
+    column_map = {
+        "background": "backgroundImagePath",
+        "midground1": "midgroundImageOnePath",
+        "midground2": "midgroundImageTwoPath",
+        "wagon": "wagonImagePath"
+    }
+    if image_type not in column_map:
+        return jsonify({"error": "Invalid image type"}), 400
+    updateImagePath(user_id, image_path, column_map[image_type])
+    return jsonify({"message": "Image uploaded", "path": image_path})
 
 
 @app.route("/logout", methods=['GET', 'POST'])

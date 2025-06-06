@@ -36,42 +36,33 @@ DATE_SCHEDULE = [
     ("December", 6), ("December", 20)
 ]
 
-
-
 def load_game_state():
-    """
-    Load the current user's game state from the 'stats' table.
-    Any fields not present in the table remain at their in‐memory defaults.
-    """
     c, db = connect()
     user_id = session.get("user_id")
     if not user_id:
         close(db)
         return
-
     row = c.execute("""
         SELECT
-            distanceTraveled,   -- → game_state['distance']
-            daysPassed,         -- → game_state['days_on_trail']
-            survivingPeople,    -- → game_state['survivors']
-            foodQuantity,       -- → game_state['food']
-            money,              -- → game_state['money']
-            oxen,               -- → game_state['oxen_spent']
-            bullets,            -- → game_state['bullets']
-            event_counter,      -- → game_state['event_counter']
-            injury,             -- → game_state['injury_flag']
-            illness,            -- → game_state['illness_flag']
-            blizzard,           -- → game_state['blizzard_flag']
-            fort_flag,          -- → game_state['fort_option_flag']
-            south_pass_flag     -- → game_state['south_pass_flag']
+            distanceTraveled,
+            daysPassed,
+            survivingPeople,
+            foodQuantity,
+            money,
+            oxen,
+            bullets,
+            event_counter,
+            injury,
+            illness,
+            blizzard,
+            fort_flag,
+            south_pass_flag
         FROM stats
         WHERE userID = ?
     """, (user_id,)).fetchone()
     close(db)
-
     if not row:
         return
-
     (
         game_state["distance"],
         game_state["days_on_trail"],
@@ -87,7 +78,6 @@ def load_game_state():
         fort_f,
         south_f
     ) = row
-
     game_state["oxen_spent"] = ox_val
     game_state["injury_flag"] = bool(inj_f)
     game_state["illness_flag"] = bool(ill_f)
@@ -95,20 +85,12 @@ def load_game_state():
     game_state["fort_option_flag"] = bool(fort_f)
     game_state["south_pass_flag"] = bool(south_f)
 
-
-
-
 def save_game_state():
-    """
-    Write back only those fields that exist in 'stats'. Anything in-memory‐only
-    (clothing, misc, shot_skill, etc.) is not saved until you add them to the schema.
-    """
     c, db = connect()
     user_id = session.get("user_id")
     if not user_id:
         close(db)
         return
-
     ox_val = game_state["oxen_spent"]
     c.execute("""
         UPDATE stats
@@ -145,19 +127,12 @@ def save_game_state():
     db.commit()
     close(db)
 
-
 def reset_game_state():
-    """
-    Resets the current user's stats row back to defaults, and zeroes out everything
-    in-memory. The user will have to re-run /setup.
-    """
     c, db = connect()
     user_id = session.get("user_id")
     if not user_id:
         close(db)
         return
-
-  
     c.execute("""
         UPDATE stats
            SET distanceTraveled    = 0,
@@ -177,26 +152,17 @@ def reset_game_state():
     """, (user_id,))
     db.commit()
     close(db)
-
     for key in list(game_state.keys()):
         if isinstance(game_state[key], bool):
             game_state[key] = False
         elif isinstance(game_state[key], int):
             game_state[key] = 0
-
-
     game_state["survivors"] = 5
     game_state["party_name"] = ""
     game_state["companions"] = []
     game_state["shot_skill"] = 0
 
-
-
-
 def get_current_date_message():
-    """
-    In the console you printed “MONDAY <month> <day>, 1847.” We replicate that:
-    """
     d3 = game_state["days_on_trail"]
     if d3 == 0:
         return "MONDAY March 29, 1847"
@@ -205,18 +171,12 @@ def get_current_date_message():
         return f"MONDAY {month} {day}, 1847"
     return None
 
-
 def random_event():
-    """
-    Exactly your console thresholds [6,11,13,15,17,22,32,35,37,42,44,54,64,69,95].
-    Return a list of messages describing that event.
-    """
     thresholds = [6, 11, 13, 15, 17, 22, 32, 35, 37, 42, 44, 54, 64, 69, 95]
     r = random.randint(1, 100)
     idx = 0
     while idx < len(thresholds) and r > thresholds[idx]:
         idx += 1
-
     event_funcs = [
         wagon_breakdown,
         ox_injures_leg,
@@ -235,21 +195,16 @@ def random_event():
         hail_storm,
         friendly_indians
     ]
-
     if 0 <= idx < len(event_funcs):
         return event_funcs[idx]()
     return []
 
-
 def wagon_breakdown():
     msgs = ["WAGON BREAKS DOWN — LOSE TIME AND SUPPLIES FIXING IT."]
-    # mileage -= random(1..5), supplies -= 8 in console but we'll interpret “8 supplies” as 8 misc kits.
     mileage_loss = random.randint(1, 5)
     game_state["distance"] = max(0, game_state["distance"] - mileage_loss)
-    game_state["misc"] = max(0, game_state["misc"] - 8)
-    msgs.append(f"Lost {mileage_loss} miles, used 8 misc kits (if available).")
+    msgs.append(f"Lost {mileage_loss} miles.")
     return msgs
-
 
 def ox_injures_leg():
     msgs = ["OX INJURES LEG — SLOWS YOU DOWN FOR THE REST OF TRIP"]
@@ -258,7 +213,6 @@ def ox_injures_leg():
     msgs.append("Lost 25 miles, lost $20 of oxen value.")
     return msgs
 
-
 def daughter_breaks_arm():
     msgs = [
         "BACK LUCK — YOUR DAUGHTER BROKE HER ARM",
@@ -266,10 +220,8 @@ def daughter_breaks_arm():
     ]
     mileage_loss = 5 + random.randint(0, 4)
     game_state["distance"] = max(0, game_state["distance"] - mileage_loss)
-    game_state["misc"] = max(0, game_state["misc"] - (2 + random.randint(0, 3)))
-    msgs.append(f"Lost {mileage_loss} miles, used 2–5 misc kits.")
+    msgs.append(f"Lost {mileage_loss} miles.")
     return msgs
-
 
 def ox_wanders_off():
     msgs = ["OX WANDERS OFF — SPEND TIME LOOKING FOR IT"]
@@ -277,13 +229,11 @@ def ox_wanders_off():
     msgs.append("Lost 17 miles.")
     return msgs
 
-
 def son_gets_lost():
     msgs = ["YOUR SON GETS LOST — SPEND HALF THE DAY LOOKING FOR HIM"]
     game_state["distance"] = max(0, game_state["distance"] - 10)
     msgs.append("Lost 10 miles.")
     return msgs
-
 
 def unsafe_water():
     msgs = ["UNSAFE WATER — LOSE TIME LOOKING FOR CLEAN SPRING"]
@@ -292,45 +242,33 @@ def unsafe_water():
     msgs.append(f"Lost {mileage_loss} miles.")
     return msgs
 
-
 def heavy_rains():
-    """
-    In your console: if distance ≤ 950, lose 10 food, 500 bullets, 15 supplies, 
-    and 2–10 miles; otherwise nothing.
-    """
     msgs = []
     if game_state["distance"] <= 950:
         msgs.append("HEAVY RAINS — TIME AND SUPPLIES LOST")
         lost_food = min(game_state["food"], 10)
         lost_bullets = min(game_state["bullets"], 500)
-        lost_misc = min(game_state["misc"], 15)
         game_state["food"] = max(0, game_state["food"] - lost_food)
         game_state["bullets"] = max(0, game_state["bullets"] - lost_bullets)
-        game_state["misc"] = max(0, game_state["misc"] - lost_misc)
         mileage_loss = 5 + random.randint(0, 10)
         game_state["distance"] = max(0, game_state["distance"] - mileage_loss)
-        msgs.append(f"Lost {lost_food} food, {lost_bullets} bullets, {lost_misc} misc kits, {mileage_loss} miles.")
+        msgs.append(f"Lost {lost_food} food, {lost_bullets} bullets, {mileage_loss} miles.")
     return msgs
-
 
 def bandits_attack():
     msgs = ["BANDITS ATTACK!"]
     msgs.extend(shoot_out())
     return msgs
 
-
 def wagon_fire():
     msgs = ["THERE WAS A FIRE IN YOUR WAGON — FOOD AND SUPPLIES DAMAGED!"]
     lost_food = min(game_state["food"], 40)
     lost_bullets = min(game_state["bullets"], 400)
-    lost_misc = min(game_state["misc"], random.randint(3, 10))
     game_state["food"] = max(0, game_state["food"] - lost_food)
     game_state["bullets"] = max(0, game_state["bullets"] - lost_bullets)
-    game_state["misc"] = max(0, game_state["misc"] - lost_misc)
     game_state["distance"] = max(0, game_state["distance"] - 15)
-    msgs.append(f"Lost {lost_food} food, {lost_bullets} bullets, {lost_misc} misc kits, 15 miles.")
+    msgs.append(f"Lost {lost_food} food, {lost_bullets} bullets, 15 miles.")
     return msgs
-
 
 def lose_way_in_fog():
     msgs = ["LOSE YOUR WAY IN HEAVY FOG — TIME IS LOST"]
@@ -339,18 +277,16 @@ def lose_way_in_fog():
     msgs.append(f"Lost {mileage_loss} miles.")
     return msgs
 
-
 def snake_bite():
     msgs = ["YOU KILLED A POISONOUS SNAKE AFTER IT BIT YOU"]
     lost_bullets = min(game_state["bullets"], 10)
     game_state["bullets"] = max(0, game_state["bullets"] - lost_bullets)
     game_state["misc"] = max(0, game_state["misc"] - 5)
-    msgs.append(f"Lost {lost_bullets} bullets, 5 misc kits.")
+    msgs.append(f"Lost {lost_bullets} bullets, used 5 misc kits.")
     if game_state["misc"] < 0:
         msgs.append("YOU DIED OF SNAKEBITE SINCE YOU HAVE NO MEDICINE")
         game_state["survivors"] = 0
     return msgs
-
 
 def ford_river_swamped():
     msgs = ["WAGON GETS SWAMPED FORDING RIVER — LOSE FOOD AND CLOTHES"]
@@ -362,7 +298,6 @@ def ford_river_swamped():
     game_state["distance"] = max(0, game_state["distance"] - mileage_loss)
     msgs.append(f"Lost {lost_food} food, {lost_clothing} clothing, {mileage_loss} miles.")
     return msgs
-
 
 def wild_animals_attack():
     msgs = ["WILD ANIMALS ATTACK!"]
@@ -391,7 +326,6 @@ def wild_animals_attack():
         game_state["injury_flag"] = True
     return msgs
 
-
 def cold_weather():
     msgs = ["COLD WEATHER — BRRRRRRR! YOU "]
     threshold = 22 + 4 * random.random()
@@ -402,18 +336,14 @@ def cold_weather():
         game_state["injury_flag"] = True
     return msgs
 
-
 def hail_storm():
     msgs = ["HAIL STORM — SUPPLIES DAMAGED"]
-    lost_misc = min(game_state["misc"], 4 + random.randint(0, 3))
     lost_bullets = min(game_state["bullets"], 200)
     lost_food = min(game_state["food"], 5)
-    game_state["misc"] = max(0, game_state["misc"] - lost_misc)
     game_state["bullets"] = max(0, game_state["bullets"] - lost_bullets)
     game_state["food"] = max(0, game_state["food"] - lost_food)
-    msgs.append(f"Lost {lost_misc} misc kits, {lost_bullets} bullets, {lost_food} food.")
+    msgs.append(f"Lost {lost_bullets} bullets, {lost_food} food.")
     return msgs
-
 
 def friendly_indians():
     msgs = ["HELPFUL INDIANS SHOW YOU WHERE TO FIND MORE FOOD"]
@@ -421,13 +351,7 @@ def friendly_indians():
     msgs.append("Gained 14 food.")
     return msgs
 
-
 def shoot_out():
-    """
-    Subroutine for attacking hostile bandits (or animals).  
-    Uses your shot_skill in exactly the same formula as your console:
-      success_chance = 60 + 10 * (5 - shot_skill).
-    """
     msgs = []
     skill = game_state["shot_skill"]
     success_chance = 60 + 10 * (5 - skill)
@@ -445,17 +369,11 @@ def shoot_out():
         msgs.append("Used 5 misc kits for treatment (if available).")
     return msgs
 
-
 def check_mountains():
-    """
-    If distance > 950, there's a chance of a rugged mountains event.  
-    Exactly matches your console logic, including South Pass checks.
-    """
     msgs = []
     st = game_state
     if st["distance"] <= 950:
         return []
-
     difficulty = ((st["distance"] / 100 - 15) ** 2 + 72)
     threshold = 9 - difficulty / (difficulty + 12)
     if random.random() * 10 > threshold:
@@ -466,19 +384,16 @@ def check_mountains():
             st["distance"] = max(0, st["distance"] - 60)
         elif 0.1 <= r < 0.21:
             msgs.append("WAGON DAMAGED! — LOSE TIME AND SUPPLIES")
-            lost_misc = min(st["misc"], 5)
             lost_bullets = min(st["bullets"], 200)
             mileage_loss = 20 + 30 * random.random()
-            st["misc"] -= lost_misc
             st["bullets"] -= lost_bullets
             st["distance"] = max(0, st["distance"] - int(mileage_loss))
-            msgs.append(f"Used {lost_misc} misc kits, lost {lost_bullets} bullets, ~{int(mileage_loss)} miles.")
+            msgs.append(f"Lost {lost_bullets} bullets, ~{int(mileage_loss)} miles.")
         else:
             msgs.append("THE GOING GETS SLOW")
             mileage_loss = 45 + random.random() / 0.02
             st["distance"] = max(0, st["distance"] - int(mileage_loss))
             msgs.append(f"Lost ~{int(mileage_loss)} miles.")
-
         if not st["south_pass_flag"] and st["distance"] >= 1700:
             if random.random() < 0.8:
                 msgs.append("YOU MADE IT SAFELY THROUGH SOUTH PASS — NO SNOW")
@@ -486,76 +401,48 @@ def check_mountains():
                 msgs.append("BLIZZARD IN SOUTH PASS — TIME AND SUPPLIES LOST")
                 st["blizzard_flag"] = True
                 lost_food = min(st["food"], 25)
-                lost_misc = min(st["misc"], 10)
                 lost_bullets = min(st["bullets"], 300)
                 mileage_loss = 30 + 40 * random.random()
                 st["food"] -= lost_food
-                st["misc"] -= lost_misc
                 st["bullets"] -= lost_bullets
                 st["distance"] = max(0, st["distance"] - int(mileage_loss))
-                msgs.append(f"Lost {lost_food} food, {lost_misc} misc kits, {lost_bullets} bullets, ~{int(mileage_loss)} miles.")
+                msgs.append(f"Lost {lost_food} food, {lost_bullets} bullets, ~{int(mileage_loss)} miles.")
                 if st["clothing"] < 18 + 2 * random.random():
                     msgs.append("YOU DIED IN BLIZZARD — NOT ENOUGH CLOTHING")
                     st["survivors"] = 0
             st["south_pass_flag"] = True
-
     return msgs
-
 
 def check_illness():
-    """
-    Mirroring your console code's exact percentages:
-      - Wild Illness:    < 10 + 35 * (eating_choice − 1)  (needs medicine)
-      - Bad Illness:     elif < 100 − (40 / (4^(eating_choice − 1))) (needs medicine)
-      - Else:            Serious Ill — “must stop for Medical Attention” (–10 misc kits)
-
-    If misc kits < 10 after that, you “die of no_supplies.”
-    """
     msgs = []
     st = game_state
-
     if st["blizzard_flag"] or st["injury_flag"]:
         return []
-
     e_level = st.get("eating_choice", 2)
-
-
-    if random.randint(1, 100) < 10 + 35 * (e_level - 1):
+    roll = random.randint(1, 100)
+    if roll < 5:
         msgs.append("WILD ILLNESS — MEDICINE USED")
         st["distance"] = max(0, st["distance"] - 5)
-        st["misc"] = st["misc"] - 2
-        msgs.append("Lost 5 miles, used 2 misc kits.")
-
-    elif random.randint(1, 100) < int(100 - (40 / (4 ** (e_level - 1)))):
+        st["misc"] = st["misc"] - 1
+        msgs.append("Lost 5 miles, used 1 misc kit.")
+    elif roll < 10:
         msgs.append("BAD ILLNESS — MEDICINE USED")
         st["distance"] = max(0, st["distance"] - 5)
-        st["misc"] = st["misc"] - 5
-        msgs.append("Lost 5 miles, used 5 misc kits.")
+        st["misc"] = st["misc"] - 3
+        msgs.append("Lost 5 miles, used 3 misc kits.")
     else:
-        msgs.append("SERIOUS ILLNESS — YOU MUST STOP FOR MEDICAL ATTENTION")
-        st["illness_flag"] = False
-        st["misc"] = st["misc"] - 10
-        msgs.append("Used 10 misc kits.")
-
-    if st["misc"] < 10:
+        return []
+    if st["misc"] < 0:
         msgs.append("YOU RAN OUT OF MEDICAL SUPPLIES — YOU DIED OF ILLNESS")
         st["survivors"] = 0
-
     return msgs
 
-
 def check_end_conditions():
-    """
-    Check if starved or arrived.
-    """
     msgs = []
     st = game_state
-
-
     if st["food"] <= 0 and st["survivors"] > 0:
         msgs.append("YOU RAN OUT OF FOOD AND STARVED TO DEATH.")
         st["survivors"] = 0
-
     if st["distance"] >= TOTAL_TRAIL and st["survivors"] > 0:
         fraction = (TOTAL_TRAIL - st["prev_distance"]) / max(1, st["distance"] - st["prev_distance"])
         st["final_fraction"] = fraction
@@ -563,77 +450,44 @@ def check_end_conditions():
         msgs.append("PRESIDENT JAMES K. POLK SENDS YOU HIS HEARTIEST CONGRATULATIONS")
         msgs.append("AND WISHES YOU A PROSPEROUS LIFE AHEAD AT YOUR NEW HOME")
         st["survivors"] = 0
-
     return msgs
 
-
 def travel_turn():
-    """
-    EXACTLY as your console `eat_and_travel` + event checks:
-      - Travel 10–30 miles
-      - Consume 2 lbs of food per person
-      - If food ≥ 13, do a moderate meal (−18 food) and gain a bonus
-      - Then random_event() if event_counter ≥ 1
-      - Then check_mountains, check_illness, check_end_conditions
-    """
     msgs = []
     st = game_state
-
-
     miles = random.randint(10, 30)
     st["prev_distance"] = st["distance"]
     st["distance"] += miles
     msgs.append(f"You traveled {miles} miles down the trail.")
-
     cost_food = st["survivors"] * 2
     st["food"] = max(0, st["food"] - cost_food)
     msgs.append(f"You consumed {cost_food} lbs of food.")
-
     st["days_on_trail"] += 1
     st["fort_option_flag"] = True
-
     if st["food"] >= 13:
         st["food"] -= 18
         bonus = int((1 - ((TOTAL_TRAIL - st["distance"]) / TOTAL_TRAIL)) *
                     (8 + (st["oxen_spent"] - 220) / 5 + random.randint(0, 9)))
         st["distance"] += max(0, bonus)
         msgs.append(f"You ate a moderate meal (−18 food) and gained a {bonus}-mile bonus from healthy oxen.")
-
     st["event_counter"] += 1
     if st["event_counter"] >= 1:
         ev_msgs = random_event()
         if ev_msgs:
             msgs.extend(ev_msgs)
         st["event_counter"] = 0
-
     msgs.extend(check_mountains())
     msgs.extend(check_illness())
     msgs.extend(check_end_conditions())
-
     return msgs
 
-
 def hunt_turn():
-    """
-    EXACTLY as your console `hunt_turn`:
-      - If bullets ≤ 0, fail
-      - days_on_trail += 1
-      - Random prey quality (1..5):
-          * 1 → Missed
-          * 2–3 → gain 48–52 ± small, bullets − (10 + 3*quality)
-          * 4–5 → gain 52–58 ± small, bullets − (10–14)
-      - Then if food ≥ 13 → moderate meal (−18, plus bonus)
-      - Then random_event, mountains, illness, end checks
-    """
     msgs = []
     st = game_state
-
     if st["bullets"] <= 0:
         msgs.append("TOUGH — YOU NEED MORE BULLETS TO GO HUNTING.")
         return msgs
-
     st["days_on_trail"] += 1
-
     prey_quality = random.randint(1, 5)
     if prey_quality == 1:
         msgs.append("YOU MISSED — AND YOUR DINNER GOT AWAY.")
@@ -649,120 +503,78 @@ def hunt_turn():
         cost_bullets = random.randint(10, 14)
         st["bullets"] = max(0, st["bullets"] - cost_bullets)
         msgs.append(f"BIG SHOT! You gained {gained} food and used {cost_bullets} bullets.")
-
     if st["food"] >= 13:
         st["food"] -= 18
         bonus = int((1 - ((TOTAL_TRAIL - st["distance"]) / TOTAL_TRAIL)) *
                     (8 + (st["oxen_spent"] - 220) / 5 + random.randint(0, 9)))
         st["distance"] += max(0, bonus)
         msgs.append(f"You ate a moderate meal (−18 food) and gained a {bonus}-mile bonus.")
-
-
     st["event_counter"] += 1
     if st["event_counter"] >= 1:
         ev_msgs = random_event()
         if ev_msgs:
             msgs.extend(ev_msgs)
         st["event_counter"] = 0
-
     msgs.extend(check_mountains())
     msgs.extend(check_illness())
     msgs.extend(check_end_conditions())
-
     return msgs
 
-
 def rest_turn():
-    """
-    EXACTLY as your console `rest_turn`:
-      - days_on_trail += 1
-      - Consume 1 lb of food per person
-      - If food ≥ 13 → moderate meal (−18, plus bonus)
-      - Then random_event, mountains, illness, end
-    """
     msgs = []
     st = game_state
-
     st["days_on_trail"] += 1
     cost_food = st["survivors"] * 1
     st["food"] = max(0, st["food"] - cost_food)
     msgs.append(f"You rested for a day and used {cost_food} food.")
-
     if st["food"] >= 13:
         st["food"] -= 18
         bonus = int((1 - ((TOTAL_TRAIL - st["distance"]) / TOTAL_TRAIL)) *
                     (8 + (st["oxen_spent"] - 220) / 5 + random.randint(0, 9)))
         st["distance"] += max(0, bonus)
         msgs.append(f"You ate a moderate meal (−18 food) and gained a {bonus}-mile bonus.")
-
     st["event_counter"] += 1
     if st["event_counter"] >= 1:
         ev_msgs = random_event()
         if ev_msgs:
             msgs.extend(ev_msgs)
         st["event_counter"] = 0
-
     msgs.extend(check_mountains())
     msgs.extend(check_illness())
     msgs.extend(check_end_conditions())
-
     return msgs
 
-
 def fort_turn():
-    """
-    EXACTLY as your console's “Visit Fort” logic (in your console, 
-    you bought at a reduced 2/3 price on all items—but we simplify
-    as in your console code snippet: 1 day passes, you spend up to 
-    whatever, etc.  We replicate your console `fort()` almost verbatim).
-    """
     msgs = []
     st = game_state
-
     msgs.append("You arrive at the next fort.")
-
     msgs.append("No purchases at the Fort (placeholder logic).")
-
-
     st["days_on_trail"] += 1
     cost_food = st["survivors"] * 1
     st["food"] = max(0, st["food"] - cost_food)
     msgs.append(f"Used {cost_food} food while at the fort.")
-
-
     if st["food"] >= 13:
         st["food"] -= 18
         bonus = int((1 - ((TOTAL_TRAIL - st["distance"]) / TOTAL_TRAIL)) *
                     (8 + (st["oxen_spent"] - 220) / 5 + random.randint(0, 9)))
         st["distance"] += max(0, bonus)
         msgs.append(f"You ate a moderate meal (−18 food) and gained a {bonus}-mile bonus.")
-
-
     st["event_counter"] += 1
     if st["event_counter"] >= 1:
         ev_msgs = random_event()
         if ev_msgs:
             msgs.extend(ev_msgs)
         st["event_counter"] = 0
-
     msgs.extend(check_mountains())
     msgs.extend(check_illness())
     msgs.extend(check_end_conditions())
     return msgs
 
-
 def game_turn(action):
-    """
-    Called by Flask each time the user posts “action=travel/hunt/rest/fort.” 
-    Return a list of strings to flash. If the game is already over, return a single message.
-    """
     msgs = []
     st = game_state
-
- 
     if st["survivors"] <= 0 or st["distance"] >= TOTAL_TRAIL:
         return ["Game is already over. No further actions possible."]
-
     if action == "travel":
         msgs = travel_turn()
     elif action == "hunt":
@@ -776,6 +588,5 @@ def game_turn(action):
             msgs = fort_turn()
     else:
         msgs = [f"Unknown action: {action}"]
-
     save_game_state()
     return msgs
