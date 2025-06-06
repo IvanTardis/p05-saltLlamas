@@ -189,11 +189,6 @@ def builder():
             print("\n\n\nSAVING INIT\n\n\n\n")
             saveWork(session['user'])
 
-    return render_template('builder.html', events=currEvents, path=currPath,
-        startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
-        characters=currCharacters, game=fullGame,
-        trailLength=currDist, currTitle=currTitle)
-
     return render_template(
         'builder.html',
         events=currEvents,
@@ -202,9 +197,10 @@ def builder():
         endPoint=currPath[1],
         startDate=currStartDate,
         characters=currCharacters,
-        monuments=currMonuments,
-        game=fullGame
-    )
+        game=fullGame,
+        trailLength=currDist,
+        currTitle=currTitle)
+
 @app.route("/setup", methods=["GET", "POST"])
 def setup():
     """

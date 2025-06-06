@@ -141,6 +141,7 @@ def saveWork(usrname):
     print("\n\n\nSAVING HERE\n\n\n\n")
     save_user_game(usrname, currGame.get('title'), currGame)
     currGame.clear()
+    currGame = baseGame.copy()
 
 
 def reset():
