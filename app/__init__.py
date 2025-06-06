@@ -25,9 +25,9 @@ build()
 # Routes
 @app.route(("/"), methods=['GET', 'POST'])
 def home():
-    test = "LOGGED IN"
+    test = ""
     if "user_id" not in session:
-        test = "NOT LOGGED IN"
+        test = ""
     return render_template('home.html', test=test)
 
 
@@ -68,6 +68,9 @@ def builder():
     if "user_id" not in session:
         flash("You must log in to build a game.", "warning")
         return redirect(url_for("login"))
+
+    currTitle = getTitle()
+    changeTitle = request.form.get('title')
 
     currEvents = getCurrEvents()
     currPath = getCurrPath()
@@ -124,11 +127,13 @@ def builder():
             addBack(foregroundImage)
         elif trailLength:
             currDist = changeDistance(trailLength)
+        elif changeTitle:
+            currTitle = changeTitle(changeTitle)
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
         characters=currCharacters, monuments=currMonuments, game=fullGame,
-        trailLength=currDist)
+        trailLength=currDist, currTitle=currTitle)
 
 
 @app.route("/setup", methods=["GET", "POST"])

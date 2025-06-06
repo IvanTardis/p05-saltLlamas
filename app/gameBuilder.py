@@ -55,9 +55,17 @@ baseMonument = {
 
 # danger, search, shop
 
+currTitle = ""
 currEvents = []
 currImages = [None]*4
 # currPath = [None] * 2
+
+def getTitle():
+    return currTitle
+
+def changeTitle(input):
+    currTitle = input
+    return currTitle
 
 def getDistance():
     return currGame.get("distance")
