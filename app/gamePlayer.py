@@ -281,11 +281,11 @@ def snake_bite():
     msgs = ["YOU KILLED A POISONOUS SNAKE AFTER IT BIT YOU"]
     lost_bullets = min(game_state["bullets"], 10)
     game_state["bullets"] = max(0, game_state["bullets"] - lost_bullets)
-    game_state["misc"] = max(0, game_state["misc"] - 5)
-    msgs.append(f"Lost {lost_bullets} bullets, used 5 misc kits.")
-    if game_state["misc"] < 0:
-        msgs.append("YOU DIED OF SNAKEBITE SINCE YOU HAVE NO MEDICINE")
-        game_state["survivors"] = 0
+    msgs.append(f"Lost {lost_bullets} bullets.")
+    if game_state["misc"] <= 0:
+        victim = _pick_victim()
+        msgs.append(f"{victim} died of snakebite.")
+        game_state["survivors"] -= 1
     return msgs
 
 def ford_river_swamped():
@@ -416,26 +416,52 @@ def check_mountains():
 def check_illness():
     msgs = []
     st = game_state
+    # Skip illness if already in blizzard or injured
     if st["blizzard_flag"] or st["injury_flag"]:
         return []
-    e_level = st.get("eating_choice", 2)
+
     roll = random.randint(1, 100)
-    if roll < 5:
-        msgs.append("WILD ILLNESS — MEDICINE USED")
+    # Only a 5% chance of any illness event
+    if roll <= 5:
+        # Determine type of illness: wild (30% of illness cases) vs. bad (70%)
+        if random.random() < 0.3:
+            cost = 2
+            label = "WILD ILLNESS — MEDICINE USED"
+        else:
+            cost = 5
+            label = "BAD ILLNESS — MEDICINE USED"
+
+        msgs.append(label)
         st["distance"] = max(0, st["distance"] - 5)
-        st["misc"] = st["misc"] - 1
-        msgs.append("Lost 5 miles, used 1 misc kit.")
-    elif roll < 10:
-        msgs.append("BAD ILLNESS — MEDICINE USED")
-        st["distance"] = max(0, st["distance"] - 5)
-        st["misc"] = st["misc"] - 3
-        msgs.append("Lost 5 miles, used 3 misc kits.")
-    else:
-        return []
-    if st["misc"] < 0:
-        msgs.append("YOU RAN OUT OF MEDICAL SUPPLIES — YOU DIED OF ILLNESS")
-        st["survivors"] = 0
+
+        if st["misc"] >= cost:
+            st["misc"] -= cost
+            msgs.append(f"Used {cost} misc kits—everyone recovers.")
+        else:
+            # Not enough misc, one person dies
+            victim = _pick_victim()
+            msgs.append(f"{victim} died of illness.")
+            st["survivors"] = max(0, st["survivors"] - 1)
+
     return msgs
+
+def _pick_victim():
+    party = []
+    if game_state["party_name"]:
+        party.append(game_state["party_name"])
+    party.extend(game_state["companions"])
+    return random.choice(party) if party else "A party member"
+
+
+
+def _pick_victim():
+    party = []
+    if game_state["party_name"]:
+        party.append(game_state["party_name"])
+    party.extend(game_state["companions"])
+    if not party:
+        return "A party member"
+    return random.choice(party)
 
 def check_end_conditions():
     msgs = []
