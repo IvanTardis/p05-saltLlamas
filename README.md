@@ -10,7 +10,7 @@ Ivan: PM
 Flask/Python, Game code, Database
 
 Jackie:
-Javascript
+Flask/Python, Game code, Database
 
 
 ## Description
