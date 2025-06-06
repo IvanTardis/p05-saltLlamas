@@ -55,23 +55,32 @@ def home():
         midground1_path = getMidgroundImageOnePath(user_id)
         midground2_path = getMidgroundImageTwoPath(user_id)
         wagon_path = getWagonImagePath(user_id)
+        if not background_path:
+            background_path = "../static/images/layer-5.png"
+        if not midground1_path:
+            midground1_path = "../static/images/layer-1.png"
+        if not midground2_path:
+            midground2_path = "../static/images/layer-2.png"
+        if not wagon_path:
+            wagon_path = "../static/images/layer-6.png"
+
         return render_template('home.html',
-            image1 = midground1_path,
-            image2 = midground2_path,
-            image3 = "../static/images/layer-6.png",
-            image4 = "../static/images/layer-4.png",
-            image5 = background_path,
-            image6 = wagon_path,
-            test = logged_in
+            image1=midground1_path,
+            image2=midground2_path,
+            image3="../static/images/layer-6.png",
+            image4="../static/images/layer-4.png",
+            image5=background_path,
+            image6=wagon_path,
+            test=logged_in
         )
     return render_template('home.html',
-        image1 = "../static/images/layer-1.png",
-        image2 = "../static/images/layer-2.png",
-        image3 = "../static/images/layer-3.png",
-        image4 = "../static/images/layer-4.png",
-        image5 = "../static/images/layer-5.png",
-        image6 = "../static/images/layer-6.png",
-        test = logged_in
+        image1="../static/images/layer-1.png",
+        image2="../static/images/layer-2.png",
+        image3="../static/images/layer-3.png",
+        image4="../static/images/layer-4.png",
+        image5="../static/images/layer-5.png",
+        image6="../static/images/layer-6.png",
+        test=logged_in
     )
 
 @app.route("/login", methods=['GET', 'POST'])
