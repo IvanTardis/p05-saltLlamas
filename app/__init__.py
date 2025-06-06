@@ -25,7 +25,6 @@ app.secret_key = os.urandom(32)
 
 build()
 
-
 @app.route("/", methods=['GET', 'POST'])
 def home():
     logged_in = "NOT LOGGED IN"
@@ -42,7 +41,6 @@ def home():
     return render_template('home.html',
         test = logged_in
     )
-
 
 """
 @app.route("/", methods=['GET', 'POST'])
