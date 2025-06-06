@@ -6,7 +6,7 @@ p05 - Le fin
 time spent: XYZ hrs
 '''
 from flask import Flask, render_template, request, session, redirect, url_for, flash
-from database import auth, createUser, getHighScore, build
+from database import auth, createUser, getHighScore, build, updateImagePath
 from gameBuilder import *
 from gamePlayer import game_turn, load_game_state, save_game_state, game_state
 
