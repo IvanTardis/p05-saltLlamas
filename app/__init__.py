@@ -5,7 +5,7 @@ SoftDev
 p05 - Le fin
 time spent: XYZ hrs
 '''
-from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 from database import auth, createUser, getHighScore, build, updateImagePath
 from gameBuilder import *
 from gamePlayer import (
@@ -134,7 +134,6 @@ def builder():
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
         characters=currCharacters, monuments=currMonuments, game=fullGame,
         trailLength=currDist, currTitle=currTitle)
-
 
     return render_template(
         'builder.html',
@@ -284,11 +283,6 @@ def play():
         total_trail=2040
     )
 
-
-
-
-
-
 @app.route("/profile", methods=['GET', 'POST'])
 def profile():
     if 'user_id' not in session:
@@ -299,15 +293,21 @@ def profile():
     user_stats = getHighScore(user_id)
     return render_template('profile.html', stats=user_stats)
 
+@app.route("/logout", methods=['GET', 'POST'])
+def logout():
+    session.clear()
+    flash("Logged out successfully", 'info')
+    return redirect(url_for("home"))
+
 @app.route("/upload-image", methods=['POST'])
 def upload_image():
     if "user_id" not in session:
-        return jsonify({"error": "Unauthorized"}), 403
+        flash("Upload not saved: You're not logged in", "danger")
     image_file = request.files.get('image')
     image_type = request.form.get('type')
     user_id = session['user_id']
     if not image_file or not image_type:
-        return jsonify({"error": "Missing image or type"}), 400
+        flash("Image Failed to Upload Properly", "danger")
     os.makedirs("uploads", exist_ok=True)
     filename = f"user{user_id}_{image_type}_{image_file.filename}"
     image_path = os.path.join("uploads", filename)
@@ -319,18 +319,9 @@ def upload_image():
         "wagon": "wagonImagePath"
     }
     if image_type not in column_map:
-        return jsonify({"error": "Invalid image type"}), 400
+        flash("Invalid Image Format", "danger")
     updateImagePath(user_id, image_path, column_map[image_type])
-    return jsonify({"message": "Image uploaded", "path": image_path})
-
-
-@app.route("/logout", methods=['GET', 'POST'])
-def logout():
-    session.clear()
-    flash("Logged out successfully", 'info')
-    return redirect(url_for("home"))
-
-
+    flash("Image uploaded.","success")
 if __name__ == "__main__":
     app.debug = True
     app.run()
