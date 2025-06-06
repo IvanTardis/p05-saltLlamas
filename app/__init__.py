@@ -35,7 +35,7 @@ def home():
         midground1_path = getMidgroundImageOnePath(user_id)
         midground2_path = getMidgroundImageTwoPath(user_id)
         wagon_path = getWagonImagePath(user_id)
-        return render_template('builder.html',
+        return render_template('home.html',
             test = logged_in
         )
     return render_template('home.html', test=logged_in)
