@@ -25,6 +25,7 @@ app.secret_key = os.urandom(32)
 
 build()
 
+"""
 @app.route("/", methods=['GET', 'POST'])
 def home():
     logged_in = "NOT LOGGED IN"
@@ -41,8 +42,9 @@ def home():
     return render_template('home.html',
         test = logged_in
     )
-
 """
+
+
 @app.route("/", methods=['GET', 'POST'])
 def home():
     logged_in = "NOT LOGGED IN"
@@ -71,7 +73,6 @@ def home():
         image6 = "../static/images/layer-6.png",
         test = logged_in
     )
-"""
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
