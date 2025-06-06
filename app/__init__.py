@@ -27,9 +27,9 @@ build()
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    logged_in = "NOT LOGGED IN"
+    logged_in = ""
     if "user_id" in session:
-        logged_in = "LOGGED IN"
+        logged_in = ""
         user_id = session.get('user_id')
         background_path = getBackgroundImagePath(user_id)
         midground1_path = getMidgroundImageOnePath(user_id)
