@@ -101,3 +101,13 @@ ivanG -- 2025-06-03
 ivanG -- 2025-06-04
 - Allow user to add distance they want to be travelled for their journey
 - Added save button to be used for publishing the users' game when ready
+
+ivanG -- 2025-06-05 - 2025-06-06
+- Adding a lot more customization options, and saving it to database as well, which worked-ish
+- Working with group to weave together all features, such as image uploads and saving paths
+- Final product more or less done, WHY IS MY SITE INTERNAL SERVER ERRORing
+
+DESIGN DOC Changes:
+- Removed all plans for a map
+- Removed plans for a library page
+- Reorganized database tables to reflect current setup
