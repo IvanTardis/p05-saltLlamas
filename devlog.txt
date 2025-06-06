@@ -76,13 +76,23 @@ abidurR -- 2025-05-27 12:54
 -Achieved parallax effect on home screen using HTML Canvas
 -Started working on image file upload to database
 
+christopherL -- 2025-05-27 11:47
+- Bug fixed database file
+
 ivanG -- 2025-05-28 09:24
 - Finished python functionality for adding a new playable character to custom game
 - More planning on how to do food and other customizable elements
 
+christopherL -- 2025-05-29 11:47
+- Researched how to store image and image paths in the database.
+- Bug fixed
+
 ivanG -- 2025-05-29 11:46
 - Cleaning the customizable builder python functionality
 - Hoping to get a base game integrated with the play feature soon
+
+christopherL -- 2025-05-29 11:47
+- Added basic database table columns and functions in preparation for image uploading and saving.
 
 ivanG -- 2025-05-30
 - Fixed functionality bugs that impeded running
@@ -98,14 +108,28 @@ ivanG -- 2025-06-03
 - Mostly working on how to upload images to the page
 - Did research on ways to save the image to a folder
 
+christopherL -- 2025-06-03 11:47
+- Worked on how to save uploaded image paths into the user database.
+- Linked image upload javascript to python flask code that called database code to store images.
+
 ivanG -- 2025-06-04
 - Allow user to add distance they want to be travelled for their journey
 - Added save button to be used for publishing the users' game when ready
+
+christopherL -- 2025-06-04 11:47
+- Worked on getting user upload of personal customization images to save (attepts to bug fix failed)
 
 ivanG -- 2025-06-05 - 2025-06-06
 - Adding a lot more customization options, and saving it to database as well, which worked-ish
 - Working with group to weave together all features, such as image uploads and saving paths
 - Final product more or less done, WHY IS MY SITE INTERNAL SERVER ERRORing
+
+christopherL -- 2025-06-05 - 2025-06-06 04:00
+- Finished image upload and saving for customizing user images in database and flask.
+- Allowed user game storing by creating new table of dictionaries in database file + corresponding functions
+- Created basic user profile page (which takes user to log out).
+- Bug fixed to get working site.
+- Attempted to get home page images to save (html, js, &flask) but this didnt work.
 
 DESIGN DOC Changes:
 - Removed all plans for a map
