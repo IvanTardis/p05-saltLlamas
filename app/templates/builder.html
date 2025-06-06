@@ -19,7 +19,7 @@
   <!-- Create Game Title -->
   <form action="{{ url_for('builder') }}" method="POST">
           <h3><b><label for="title" class="form-label">Name your trail:</label></b></h3>
-          <input type="text" class="form-control" id="title" name="title" placeholder={{ currTitle }}required>
+          <input type="text" class="form-control" id="title" name="title" placeholder={{ currTitle }} required>
       </div>
       <button type="submit" class="btn btn-success btn-lg">Set Name</button>
   </form>
@@ -27,7 +27,7 @@
   <!-- Setting Start Date -->
   <form action="{{ url_for('builder') }}" method="POST">
           <label for="events" class="form-label">Choose Journey's Start Date</label>
-          <input type="date" class="form-control" id="startDate" name="startDate" placeholder={{ startDate }}required>
+          <input type="date" class="form-control" id="startDate" name="startDate" placeholder={{ startDate }} required>
       </div>
       <button type="submit" class="btn btn-success btn-lg">Set Date</button>
   </form>
