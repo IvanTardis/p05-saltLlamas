@@ -253,28 +253,28 @@ def profile():
     user_stats = getHighScore(user_id)
     return render_template('profile.html', stats=user_stats)
 
-@app.route("/upload-image", methods = ['POST'])
+@app.route("/upload-image", methods=['POST'])
 def upload_image():
-    image_file = request.files['image']
-    image_type = request.form['type']
-
-    if not image_file:
-        return jsonify({"error": "No image provided"}), 400
-
-    # Save image
-    image_path = os.path.join("uploads", image_file.filename)
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 403
+    image_file = request.files.get('image')
+    image_type = request.form.get('type')
+    user_id = session['user_id']
+    if not image_file or not image_type:
+        return jsonify({"error": "Missing image or type"}), 400
+    os.makedirs("uploads", exist_ok=True)
+    filename = f"user{user_id}_{image_type}_{image_file.filename}"
+    image_path = os.path.join("uploads", filename)
     image_file.save(image_path)
-
-    # Call corresponding function
-    if image_type == "background":
-        createBackgroundImage(image_path)
-    elif image_type == "midground1":
-        createMidgroundImageOne(image_path)
-    elif image_type == "midground2":
-        createMidgroundImageTwo(image_path)
-    elif image_type == "wagon":
-        createWagonImage(image_path)
-    
+    column_map = {
+        "background": "backgroundImagePath",
+        "midground1": "midgroundImageOnePath",
+        "midground2": "midgroundImageTwoPath",
+        "wagon": "wagonImagePath"
+    }
+    if image_type not in column_map:
+        return jsonify({"error": "Invalid image type"}), 400
+    updateImagePath(user_id, image_path, column_map[image_type])
     return jsonify({"message": "Image uploaded", "path": image_path})
 
 
