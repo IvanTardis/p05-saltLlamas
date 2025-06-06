@@ -36,6 +36,24 @@ def home():
         midground2_path = getMidgroundImageTwoPath(user_id)
         wagon_path = getWagonImagePath(user_id)
         return render_template('home.html',
+            test = logged_in
+        )
+    return render_template('home.html',
+        test = logged_in
+    )
+
+"""
+@app.route("/", methods=['GET', 'POST'])
+def home():
+    logged_in = "NOT LOGGED IN"
+    if "user_id" in session:
+        logged_in = "LOGGED IN"
+        user_id = session.get('user_id')
+        background_path = getBackgroundImagePath(user_id)
+        midground1_path = getMidgroundImageOnePath(user_id)
+        midground2_path = getMidgroundImageTwoPath(user_id)
+        wagon_path = getWagonImagePath(user_id)
+        return render_template('home.html',
             image1 = midground1_path,
             image2 = midground2_path,
             image3 = "../static/images/layer-6.png",
@@ -53,6 +71,7 @@ def home():
         image6 = "../static/images/layer-6.png",
         test = logged_in
     )
+"""
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
