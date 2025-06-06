@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
   <h2 class="text-center">Oregon Trail – On the Move</h2>
+       <div id="game-container" class="bg-white position=relative width=100vw height=100vh">
+      <canvas id="layer1" class ="position=absolute width=100% height=100% display=block"></canvas>
+       </div>
   <div class="card bg-secondary text-light mb-4">
     <div class="card-body">
       <h5 class="card-title">Current Game State</h5>
@@ -83,4 +86,22 @@
       </form>
     </div>
   </div>
+    <image id='DesertBg' src="../static/images/gameImages/Desert/Background.png" hidden></image>
+    <image id='DesertFg' src="../static/images/gameImages/Desert/Foreground.png" hidden></image>
+    <image id='DesertMg1' src="../static/images/gameImages/Desert/Midground1.png" hidden></image>
+    <image id='DesertMg2' src="../static/images/gameImages/Desert/Midground2.png" hidden></image>
+
+    <image id='JungleBg' src="../static/images/gameImages/Jungle/Backround.png" hidden></image>
+    <image id='JungleFg' src="../static/images/gameImages/Jungle/Foreground.png" hidden></image>
+    <image id='JungleMg1' src="../static/images/gameImages/Jungle/Midground1.png" hidden></image>
+    <image id='JungleMg2' src="../static/images/gameImages/Jungle/Midground2.png" hidden></image>
+
+
+    <image id='MountainBg' src="../static/images/gameImages/Mountain/Background.png" hidden></image>
+    <image id='MountainFg' src="../static/images/gameImages/Mountain/Foreground.png" hidden></image>
+    <image id='MountainMg1' src="../static/images/gameImages/Mountain/Midground1.png" hidden></image>
+    <image id='MountainMg2' src="../static/images/gameImages/Mountain/Midground2.png" hidden></image>
+
+
+  <script src="../static/js/game.js"
 {% endblock %}
