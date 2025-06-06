@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+from database import *
 
 import sqlite3
 import os
@@ -60,11 +61,12 @@ currImages = [None]*4
 # currPath = [None] * 2
 
 def getTitle():
-    return currTitle
+    return currGame.get('title')
 
 def changeTitle(input):
-    currTitle = input
-    return currTitle
+    print("\n\n\nChanging Title\n\n\n")
+    currGame['title'] = input
+    return input
 
 def getDistance():
     return currGame.get("distance")
@@ -135,8 +137,11 @@ def changePath(start, end):
 def getGame():
     return currGame
 
-def saveWork():
-    return 0
+def saveWork(usrname):
+    print("\n\n\nSAVING HERE\n\n\n\n")
+    save_user_game(usrname, currGame.get('title'), currGame)
+    currGame.clear()
+
 
 def reset():
     currGame.clear()

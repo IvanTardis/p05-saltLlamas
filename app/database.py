@@ -225,12 +225,12 @@ def get_single_user_game(user_id, game_id):
 db = sqlite3.connect("rest.db")
 c = db.cursor()
 
-print("== Users Table ==")
-c.execute("PRAGMA table_info(users)")
-print(c.fetchall())
-
-print("\n== Stats Table ==")
-c.execute("PRAGMA table_info(stats)")
-print(c.fetchall())
+# print("== Users Table ==")
+# c.execute("PRAGMA table_info(users)")
+# print(c.fetchall())
+#
+# print("\n== Stats Table ==")
+# c.execute("PRAGMA table_info(stats)")
+# print(c.fetchall())
 
 db.close()

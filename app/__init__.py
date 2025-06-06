@@ -121,6 +121,8 @@ def builder():
     currPath = getCurrPath()
     currStartDate = getStartDate()
     reseter = request.form.get('reset')
+    save = request.form.get('save')
+    print("SAVE: " + str(save))
     update = False
     # update = request.form.get('event')
     startPoint = request.form.get('start')
@@ -173,11 +175,14 @@ def builder():
             currDist = changeDistance(trailLength)
         elif changeTitle:
             currTitle = changeTitle(updatedTitle)
+        if save == 'save':
+            print("\n\n\nSAVING INIT\n\n\n\n")
+            saveWork(session['user'])
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
         characters=currCharacters, game=fullGame,
-        trailLength=updatedTitle, currTitle=currTitle)
+        trailLength=currDist, currTitle=currTitle)
 
     return render_template(
         'builder.html',
