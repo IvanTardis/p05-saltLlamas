@@ -23,8 +23,8 @@ const positions = layers.map(() => ({ x1: 0, x2: BASE_WIDTH }));
 
 const menuButtons = [
     { text: "Play", y: 140, path: "/play" },
-    { text: "Login", y: 210, path: "/login" },
-    { text: "Settings", y: 280, path: "/builder" },
+    { text: "Account", y: 210, path: "/profile" },
+    { text: "Game Builder", y: 280, path: "/builder" },
     { text: "Customize Background", y: 350, action: "openCustomize" }
 ];
 
@@ -40,15 +40,15 @@ function resizeCanvas() {
     const container = document.getElementById('game-container');
     const width = container.clientWidth;
     const height = container.clientHeight;
-    
+
     scaleFactor = Math.min(width / BASE_WIDTH, height / BASE_HEIGHT);
-    
+
     canvas.width = BASE_WIDTH;
     canvas.height = BASE_HEIGHT;
-    
+
     canvas.style.width = `${BASE_WIDTH * scaleFactor}px`;
     canvas.style.height = `${BASE_HEIGHT * scaleFactor}px`;
-    
+
     canvas.style.position = 'absolute';
     canvas.style.left = '50%';
     canvas.style.top = '50%';
@@ -112,17 +112,17 @@ function drawMenu() {
         const buttonRight = buttonLeft + textWidth;
         const buttonTop = button.y - 25;
         const buttonBottom = button.y;
-        
-        const isHovered = mouse.x >= buttonLeft && mouse.x <= buttonRight && 
+
+        const isHovered = mouse.x >= buttonLeft && mouse.x <= buttonRight &&
                           mouse.y >= buttonTop && mouse.y <= buttonBottom;
-        
+
         if (isHovered) {
             hoveredButton = button;
             ctx.fillStyle = 'rgb(255, 255, 255)';
         } else {
             ctx.fillStyle = 'rgb(250, 183, 50)';
         }
-        
+
         ctx.fillText(button.text, buttonLeft, button.y);
     });
 }
@@ -135,29 +135,29 @@ function drawCustomizePopup() {
     const popupHeight = 300;
     const popupX = (BASE_WIDTH - popupWidth) / 2;
     const popupY = (BASE_HEIGHT - popupHeight) / 2;
-    
+
     ctx.fillRect(popupX, popupY, popupWidth, popupHeight);
     ctx.strokeRect(popupX, popupY, popupWidth, popupHeight);
-    
+
     ctx.font = "bold 25px Arial";
     ctx.fillStyle = 'rgb(250, 183, 50)';
     ctx.textAlign = 'center';
     ctx.fillText("Customize Background", BASE_WIDTH / 2, popupY + 40);
-    
+
     ctx.font = "18px Arial";
     ctx.textAlign = 'left';
     layers.forEach((layer, index) => {
         const yPos = popupY + 80 + index * 30;
         const isSelected = index === selectedLayerIndex;
-        
+
         ctx.fillStyle = isSelected ? 'rgb(255, 255, 255)' : 'rgb(250, 183, 50)';
-        
+
         if (isSelected) {
             ctx.fillText(">", popupX + 20, yPos);
         }
-        
+
         ctx.fillText(layer.name, popupX + 50, yPos);
-        
+
         const textWidth = ctx.measureText(layer.name).width;
         if (mouse.x >= popupX + 50 && mouse.x <= popupX + 50 + textWidth &&
             mouse.y >= yPos - 20 && mouse.y <= yPos) {
@@ -165,7 +165,7 @@ function drawCustomizePopup() {
             ctx.fillText(layer.name, popupX + 50, yPos);
         }
     });
-    
+
     hoveredButton = null;
     customizeButtons.forEach(button => {
         ctx.font = "bold 18px Arial";
@@ -174,34 +174,34 @@ function drawCustomizePopup() {
         const buttonRight = buttonLeft + textWidth;
         const buttonTop = button.y - 20;
         const buttonBottom = button.y;
-        
-        const isHovered = mouse.x >= buttonLeft && mouse.x <= buttonRight && 
+
+        const isHovered = mouse.x >= buttonLeft && mouse.x <= buttonRight &&
                           mouse.y >= buttonTop && mouse.y <= buttonBottom;
-        
+
         if (isHovered) {
             hoveredButton = button;
             ctx.fillStyle = 'rgb(255, 255, 255)';
         } else {
             ctx.fillStyle = 'rgb(250, 183, 50)';
         }
-        
+
         ctx.fillText(button.text, buttonLeft, button.y);
     });
 }
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     if (currentState === STATE.MENU) {
         layers.forEach((layer, index) => {
             const pos = positions[index];
-            
+
             ctx.drawImage(layer.img, pos.x1, layer.y, canvas.width, canvas.height);
             ctx.drawImage(layer.img, pos.x2, layer.y, canvas.width, canvas.height);
-            
+
             pos.x1 -= layer.speed;
             pos.x2 -= layer.speed;
-            
+
             if (pos.x1 + canvas.width <= 0) {
                 pos.x1 = canvas.width;
             }
@@ -210,7 +210,7 @@ function animate() {
             }
         });
     }
-    
+
     if (currentState === STATE.MENU) {
         drawMenu();
     } else if (currentState === STATE.CUSTOMIZE) {
@@ -232,17 +232,17 @@ function handleCanvasClick() {
             fileInput.click();
         }
     }
-    
+
     if (currentState === STATE.CUSTOMIZE) {
         const popupWidth = 400;
         const popupHeight = 300;
         const popupX = (BASE_WIDTH - popupWidth) / 2;
         const popupY = (BASE_HEIGHT - popupHeight) / 2;
-        
+
         layers.forEach((layer, index) => {
             const yPos = popupY + 80 + index * 30;
             const textWidth = ctx.measureText(layer.name).width;
-            
+
             if (mouse.x >= popupX + 50 && mouse.x <= popupX + 50 + textWidth &&
                 mouse.y >= yPos - 20 && mouse.y <= yPos) {
                 selectedLayerIndex = index;
