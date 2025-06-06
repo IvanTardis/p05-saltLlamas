@@ -74,7 +74,7 @@ def builder():
         return redirect(url_for("login"))
 
     currTitle = getTitle()
-    changeTitle = request.form.get('title')
+    updatedTitle = request.form.get('title')
 
     currEvents = getCurrEvents()
     currPath = getCurrPath()
@@ -95,6 +95,9 @@ def builder():
     monumentName = request.form.get('monumentName')
     monumentType = request.form.get('monumentType')
     currMonuments = getMonuments()
+
+    trailLength = request.form.get('trailLength')
+    currDist = getDistance()
 
     backgroundImage = request.form.get('backgroundImage')
     midgroundImageOne = request.form.get('midgroundImageOne')
@@ -128,12 +131,12 @@ def builder():
         elif trailLength:
             currDist = changeDistance(trailLength)
         elif changeTitle:
-            currTitle = changeTitle(changeTitle)
+            currTitle = changeTitle(updatedTitle)
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
         characters=currCharacters, monuments=currMonuments, game=fullGame,
-        trailLength=currDist, currTitle=currTitle)
+        trailLength=updatedTitle, currTitle=currTitle)
 
     return render_template(
         'builder.html',
