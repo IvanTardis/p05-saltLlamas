@@ -87,8 +87,8 @@
   <!-- Obstacle -->
   <form action="{{ url_for('builder') }}" method="POST">
     <label for="obstacleName" class="form-label">What do you want the name of the main obstacle to be: </label>
-    <input type="text" id="obstacleName" name="obstacleName">
-    <input type="submit">
+    <input type="text" class="form-control" id="obstacleName" name="obstacleName" required>
+    <button type="submit" class="btn btn-success btn-lg">Update Obstacle</button>
   </form>
 
   <!-- Adding New events -->
@@ -126,6 +126,8 @@
     <input type="submit">
   </form> -->
 
+  <h6>Here is the formula for calculating points: \( (points)^2 + (distanceTraveled)^2 = total \)</h6>
+
 <br>
   <!-- Reset everything -->
   <form action="{{ url_for('builder') }}" method="POST">
@@ -138,7 +140,6 @@
   <form action="{{ url_for('builder') }}" method="POST">
       <button type="submit" class="btn btn-success btn-lg" id="save" name="save" value="save">Save Game</button>
   </form>
-
 
   <!-- <p>
     {{ game }}
