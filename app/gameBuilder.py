@@ -4,6 +4,7 @@ import sqlite3
 import os
 
 baseGame = {
+    "title": "",
     "startDate": 0,
     "currPath": [None] * 2,
     "distance": 0,
@@ -34,9 +35,7 @@ baseGame = {
             }
         }
     },
-    "monuments": {
-
-    },
+    "obstacle": "",
     "weather": "",
     "prey": ""
 }
@@ -86,13 +85,11 @@ def addMidTwo(input):
 def addFore(input):
     currImages[3] = input
 
-def addMonument(name, type):
-    temp = baseMonument.copy()
-    temp['type'] = type
-    currGame["monuments"][name] = temp
+def changeObstacle(name):
+    currGame['obstacle'] = name
 
-def getMonuments():
-    return currGame.get("monuments")
+def getObstacle():
+    return currGame.get("obstacle")
 
 def addCharacter(name, description, health, money, bonus):
     temp = baseCharacter.copy()
@@ -142,5 +139,5 @@ def saveWork():
     return 0
 
 def reset():
-    currEvents.clear()
+    currGame.clear()
     # print("Here: " + currEvents)

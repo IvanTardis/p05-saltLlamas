@@ -77,7 +77,7 @@
 
 
   <!-- Creating monuments along the journey -->
-  <form action="{{ url_for('builder') }}" method="POST">
+  <!-- <form action="{{ url_for('builder') }}" method="POST">
           <b><label for="monuments" class="form-label">New Monument</label></b><br>
           <label for="monuments" class="form-label">What is it called: </label>
           <input type="text" class="form-control" id="monumentName" name="monumentName" required>
@@ -90,18 +90,29 @@
       </div>
       <button type="submit" class="btn btn-success btn-lg">Add Monument</button>
   </form>
-<p>{{ monuments }}</p>
+<p>{{ monuments }}</p> -->
 
+  <!-- Obstacle -->
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="obstacleName" class="form-label">Upload image for background: </label>
+    <input type="text" id="obstacleName" name="obstacleName">
+    <input type="submit">
+  </form>
 
   <!-- Adding New events -->
-  <form action="{{ url_for('builder') }}" method="POST">
+  <!-- <form action="{{ url_for('builder') }}" method="POST">
           <label for="events" class="form-label">New Event</label>
           <input type="text" class="form-control" id="event" name="event" required>
       </div>
       <button type="submit" class="btn btn-success btn-lg">Add Event</button>
-  </form>
+  </form> -->
 <br>
 
+<form action="{{ url_for('builder') }}" method="POST">
+  <label for="file" class="form-label">Upload image for background: </label>
+  <input type="file" id="wagonImage" name="wagonImage">
+  <input type="submit">
+</form>
   <form action="{{ url_for('builder') }}" method="POST">
     <label for="file" class="form-label">Upload image for background: </label>
     <input type="file" id="backgroundImage" name="backgroundImage">
@@ -131,7 +142,7 @@
 
   <br><br>
 
-  <!-- Reset everything -->
+  <!-- Save everything -->
   <form action="{{ url_for('builder') }}" method="POST">
       <button type="submit" class="btn btn-success btn-lg" id="save" name="save" value="reset">Save Game</button>
   </form>
