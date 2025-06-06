@@ -6,6 +6,8 @@ const BASE_WIDTH = 800;
 const BASE_HEIGHT = 450;
 let scaleFactor = 1;
 
+const wagon = document.getElementById('Wagon');
+
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -54,6 +56,15 @@ const layers = [
     { speed: 0.6, y: 0, x: 0, name: "Midground 2" },
     { speed: 1.0, y: 0, x: 0, name: "Foreground" }
 ];
+
+// Wagon configuration
+const wagonConfig = {
+    width: 200,  // base width of the wagon
+    height: 150, // base height of the wagon
+    yOffset: .1, // position from bottom (0-1)
+    scale: 1,
+    x: 0.6      // position from left (0-1)
+};
 
 // Animation variables
 let animationId;
@@ -113,6 +124,21 @@ function drawLayer(layer, env, alpha = 1, offsetX = 0) {
     ctx.drawImage(img, x2, 0, layerWidth, canvas.height);
 }
 
+function drawWagon() {
+    if (!wagon) return;
+    
+    // Calculate wagon dimensions and position
+    const wagonScale = scaleFactor * wagonConfig.scale;
+    const wagonWidth = wagonConfig.width * wagonScale;
+    const wagonHeight = wagonConfig.height * wagonScale;
+    const wagonX = canvas.width * wagonConfig.x - wagonWidth / 2;
+    const wagonY = canvas.height * (1 - wagonConfig.yOffset) - wagonHeight;
+    
+    // Draw the wagon
+    ctx.globalAlpha = 1;
+    ctx.drawImage(wagon, wagonX, wagonY, wagonWidth, wagonHeight);
+}
+
 function draw(timestamp) {
     if (!lastTimestamp) {
         lastTimestamp = timestamp;
@@ -141,6 +167,9 @@ function draw(timestamp) {
             drawLayer(layer, environments[nextEnvironment], transitionProgress, layer.x);
         }
     });
+    
+    // Draw the wagon on top of everything
+    drawWagon();
     
     animationId = requestAnimationFrame(draw);
 }
