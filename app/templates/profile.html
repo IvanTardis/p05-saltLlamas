@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>Your Profile</title>
@@ -21,11 +21,13 @@
         }
         h1 {
             text-align: center;
+            color: black;
         }
         .stats {
             margin-top: 20px;
         }
         .stat {
+            color: black;
             padding: 10px 0;
             border-bottom: 1px solid #eee;
         }
@@ -53,4 +55,4 @@
         </div>
     </div>
 </body>
-</html>
+{% endblock %}
