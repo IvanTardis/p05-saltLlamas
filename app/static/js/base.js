@@ -251,7 +251,7 @@ function handleCanvasClick() {
     }
 }
 
-canvas.addEventListener('mousemove', (e) => {<input type="file" id="file-input" accept="image/*"></input>
+canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     mouse.x = (e.clientX - rect.left) / scaleFactor;
     mouse.y = (e.clientY - rect.top) / scaleFactor;
