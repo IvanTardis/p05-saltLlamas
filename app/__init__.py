@@ -67,7 +67,7 @@ def home():
         return render_template('home.html',
             image1=midground1_path,
             image2=midground2_path,
-            image3="../static/images/layer-6.png",
+            image3="../static/images/layer-3.png",
             image4="../static/images/layer-4.png",
             image5=background_path,
             image6=wagon_path,
