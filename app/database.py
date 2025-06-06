@@ -156,7 +156,7 @@ def getMidgroundImageTwoPath(user_id):
     Retrieve the user's Second MidgroundImagePath
     """
     c, db = connect()
-    midground_image_one_path = c.execute("SELECT midgroundImageTwoPath FROM users WHERE userID = ?",
+    midground_image_two_path = c.execute("SELECT midgroundImageTwoPath FROM users WHERE userID = ?",
         (user_id,)).fetchone()
     close(db)
     return midground_image_two_path[0] if midground_image_two_path else 0
