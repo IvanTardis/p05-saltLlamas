@@ -116,43 +116,18 @@ def getHighScore(user_id):
     close(db)
     return high_score[0] if high_score else 0
 
-def createBackgroundImage(path):
-    """Create background image path for a user"""
-    c, db = connect()
-    c.execute("""
-        INSERT INTO users(backgroundImagePath)
-        VALUES(?)""",
-        (path))
-    db.commit()
-    close(db)
+if __name__ == '__main__':
+    app.run(debug=True)
 
-def createMidgroundImageOne(path):
-    """Create midground image one path for a user"""
+def updateImagePath(user_id, path, column_name):
+    assert column_name in [
+        "backgroundImagePath",
+        "midgroundImageOnePath",
+        "midgroundImageTwoPath",
+        "wagonImagePath"
+    ]
     c, db = connect()
-    c.execute("""
-        INSERT INTO users(midgroundImageOnePath)
-        VALUES(?)""",
-        (path))
-    db.commit()
-    close(db)
-
-def createMidgroundImageTwo(path):
-    """Create midground image two path for a user"""
-    c, db = connect()
-    c.execute("""
-        INSERT INTO users(midgroundImageTwoPath)
-        VALUES(?)""",
-        (path))
-    db.commit()
-    close(db)
-
-def createWagonImage(path):
-    """Create wagon image path for a user"""
-    c, db = connect()
-    c.execute("""
-        INSERT INTO users(wagonImagePath)
-        VALUES(?)""",
-        (path))
+    c.execute(f"UPDATE users SET {column_name} = ? WHERE userID = ?", (path, user_id))
     db.commit()
     close(db)
 

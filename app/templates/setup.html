@@ -1,197 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Oregon Trail • Setup</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-</head>
-<body class="bg-dark text-light">
-  <div class="container py-5">
-    <h2 class="mb-4">Initial Party Setup</h2>
-    <p>
-      You have a base of $700 (after paying $200 for the wagon).<br />
-      First, choose your occupation—this will adjust your starting money/skills—then
-      pick a party name, companions (optional), and allocate store funds.
-    </p>
+{% extends "base.html" %}
+{% block content %}
+  <h2>Game Setup</h2>
+  <form method="POST" action="{{ url_for('setup') }}">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="party_name" class="form-label">Party Name</label>
+        <input name="party_name" id="party_name" class="form-control" placeholder="Alice's Wagon Train" />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Companions (up to 5)</label>
+        <div class="input-group mb-1"><input name="companion1" class="form-control" placeholder="Companion #1" /></div>
+        <div class="input-group mb-1"><input name="companion2" class="form-control" placeholder="Companion #2" /></div>
+        <div class="input-group mb-1"><input name="companion3" class="form-control" placeholder="Companion #3" /></div>
+        <div class="input-group mb-1"><input name="companion4" class="form-control" placeholder="Companion #4" /></div>
+        <div class="input-group mb-1"><input name="companion5" class="form-control" placeholder="Companion #5" /></div>
+      </div>
+    </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div
-            class="alert alert-{{ category }} alert-dismissible fade show"
-            role="alert"
-          >
-            {{ message }}
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-              aria-label="Close"
-            ></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    <form method="POST" action="{{ url_for('setup') }}">
-      <div class="mb-4">
-        <label for="occupation" class="form-label">Choose Your Occupation</label>
-        <select class="form-select" id="occupation" name="occupation" required>
-          <option value="" disabled selected>-- Select an Occupation --</option>
-          <option value="banker">Banker </option>
-          <option value="carpenter">Carpenter </option>
-          <option value="blacksmith">Blacksmith </option>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="occupation" class="form-label">Occupation</label>
+        <select name="occupation" id="occupation" class="form-select" required>
+          <option value="">-- select occupation --</option>
+          <option value="banker">Banker</option>
+          <option value="carpenter">Carpenter</option>
+          <option value="blacksmith">Blacksmith</option>
           <option value="farmer">Farmer</option>
           <option value="miner">Miner</option>
         </select>
       </div>
-
-
-      <div class="mb-3">
-        <label for="party_name" class="form-label">Party Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="party_name"
-          name="party_name"
-          placeholder="e.g. The Heinemann Family"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label for="companion1" class="form-label">Companion #1 (optional)</label>
-        <input
-          type="text"
-          class="form-control"
-          id="companion1"
-          name="companion1"
-          placeholder="Name"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="companion2" class="form-label">Companion #2 (optional)</label>
-        <input
-          type="text"
-          class="form-control"
-          id="companion2"
-          name="companion2"
-          placeholder="Name"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="companion3" class="form-label">Companion #3 (optional)</label>
-        <input
-          type="text"
-          class="form-control"
-          id="companion3"
-          name="companion3"
-          placeholder="Name"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="companion4" class="form-label">Companion #4 (optional)</label>
-        <input
-          type="text"
-          class="form-control"
-          id="companion4"
-          name="companion4"
-          placeholder="Name"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="companion5" class="form-label">Companion #5 (optional)</label>
-        <input
-          type="text"
-          class="form-control"
-          id="companion5"
-          name="companion5"
-          placeholder="Name"
-        />
-      </div>
-
-      <hr class="border-secondary" />
-
-
-      <h5>Store Purchases</h5>
-      <p>You have <strong>$700</strong> to allocate (after buying the wagon).<br />
-        (Please enter non –negative integers; total must not exceed $700.)</p>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="oxen" class="form-label">Oxen ($200 – 300)</label>
-          <input
-            type="number"
-            class="form-control"
-            id="oxen"
-            name="oxen"
-            min="200"
-            max="300"
-            required
-          />
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Purchase Quantities</label>
+        <div class="input-group mb-2">
+          <span class="input-group-text">Oxen Teams (×team @ $40 each)</span>
+          <input type="number" name="oxen_qty" class="form-control" min="0" value="0" required />
         </div>
-        <div class="col-md-6">
-          <label for="food" class="form-label">Food (dollars)</label>
-          <input
-            type="number"
-            class="form-control"
-            id="food"
-            name="food"
-            min="0"
-            required
-          />
+        <div class="input-group mb-2">
+          <span class="input-group-text">Food (lbs)</span>
+          <input type="number" name="food_lbs" class="form-control" min="0" value="0" required />
         </div>
-        <div class="col-md-6">
-          <label for="ammo" class="form-label">Ammunition ($1 = 50 bullets)</label>
-          <input
-            type="number"
-            class="form-control"
-            id="ammo"
-            name="ammo"
-            min="0"
-            required
-          />
+        <div class="input-group mb-2">
+          <span class="input-group-text">Ammo (belts of 50 @ $1/belt)</span>
+          <input type="number" name="ammo_qty" class="form-control" min="0" value="0" required />
         </div>
-        <div class="col-md-6">
-          <label for="clothing" class="form-label">Clothing (dollars)</label>
-          <input
-            type="number"
-            class="form-control"
-            id="clothing"
-            name="clothing"
-            min="0"
-            required
-          />
+        <div class="input-group mb-2">
+          <span class="input-group-text">Clothing Sets ($10 each)</span>
+          <input type="number" name="clothing_sets" class="form-control" min="0" value="0" required />
         </div>
-        <div class="col-md-6">
-          <label for="misc" class="form-label">Miscellaneous Supplies (dollars)</label>
-          <input
-            type="number"
-            class="form-control"
-            id="misc"
-            name="misc"
-            min="0"
-            required
-          />
+        <div class="input-group">
+          <span class="input-group-text">Misc Kits ($5 each)</span>
+          <input type="number" name="misc_kits" class="form-control" min="0" value="0" required />
         </div>
       </div>
+    </div>
 
-      <button type="submit" class="btn btn-primary mt-4">
-        Begin Your Journey
-      </button>
-    </form>
-
-    <hr class="border-secondary mt-5" />
-    <footer class="text-center text-muted small">
-      Salty Llamas — Ivan Gontchar, Jackie Zeng, Christopher Louie, Abidur Rahman<br />
-      SoftDev — p05 — “Le fin”
-    </footer>
-  </div>
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  ></script>
-</body>
-</html>
+    <button type="submit" class="btn btn-success">Complete Setup</button>
+  </form>
+{% endblock %}
