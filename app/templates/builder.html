@@ -38,6 +38,16 @@
     {{ path }}
   </p>
 
+
+  <!-- Change Trail Distance -->
+  <form action="{{ url_for('builder') }}" method="POST">
+          <label for="start" class="form-label">Length of the trail in miles:</label>
+          <input type="number" class="form-control" id="trailLength" name="trailLength" placeholder={{ trailLength }} required>
+          </div>
+      <button type="submit" class="btn btn-success btn-lg">Change distance</button>
+  </form>
+
+
   <!-- Adding new characters -->
   <form action="{{ url_for('builder') }}" method="POST">
           <b><label for="character" class="form-label">Create a New Playable Character</label></b>
@@ -82,11 +92,42 @@
       </div>
       <button type="submit" class="btn btn-success btn-lg">Add Event</button>
   </form>
+<br>
 
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="file" class="form-label">Upload image for background: </label>
+    <input type="file" id="backgroundImage" name="backgroundImage">
+    <input type="submit">
+  </form>
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="file" class="form-label">Upload image for further midground: </label>
+    <input type="file" id="midgroundImageOne" name="midgroundImageOne">
+    <input type="submit">
+  </form>
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="file" class="form-label">Upload image for nearer midground: </label>
+    <input type="file" id="midgroundImageTwo" name="midgroundImageTwo">
+    <input type="submit">
+  </form>
+  <form action="{{ url_for('builder') }}" method="POST">
+    <label for="file" class="form-label">Upload image for foreground: </label>
+    <input type="file" id="foregroundImage" name="foregroundImage">
+    <input type="submit">
+  </form>
+
+<br>
   <!-- Reset everything -->
   <form action="{{ url_for('builder') }}" method="POST">
       <button type="submit" class="btn btn-danger btn-lg" id="reset" name="reset" value="reset">Reset</button>
   </form>
+
+  <br><br>
+
+  <!-- Reset everything -->
+  <form action="{{ url_for('builder') }}" method="POST">
+      <button type="submit" class="btn btn-success btn-lg" id="save" name="save" value="reset">Save Game</button>
+  </form>
+
 
   <p>
     {{ game }}

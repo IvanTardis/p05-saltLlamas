@@ -6,6 +6,7 @@ import os
 baseGame = {
     "startDate": 0,
     "currPath": [None] * 2,
+    "distance": 0,
     "playableCharacters": {
         "name": {
             "health": 0,
@@ -55,7 +56,27 @@ baseMonument = {
 # danger, search, shop
 
 currEvents = []
+currImages = [None]*4
 # currPath = [None] * 2
+
+def getDistance():
+    return currGame.get("distance")
+
+def changeDistance(input):
+    currGame['distance'] = input
+    return input
+
+def addBack(input):
+    currImages[0] = input
+
+def addMidOne(input):
+    currImages[1] = input
+
+def addMidTwo(input):
+    currImages[2] = input
+
+def addFore(input):
+    currImages[3] = input
 
 def addMonument(name, type):
     temp = baseMonument.copy()
