@@ -30,6 +30,15 @@ def home():
     logged_in = "NOT LOGGED IN"
     if "user_id" in session:
         logged_in = "LOGGED IN"
+        user_id = session.get('user_id')
+        background_path = getBackgroundImagePath(user_id)
+        midground1_path = getMidgroundImageOnePath(user_id)
+        midground2_path = getMidgroundImageTwoPath(user_id)
+        wagon_path = getWagonImagePath(user_id)
+        return render_template('builder.html',
+            
+            test = logged_in
+        )
     return render_template('home.html', test=logged_in)
 
 @app.route("/login", methods=['GET', 'POST'])

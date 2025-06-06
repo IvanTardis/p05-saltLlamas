@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .profile-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .stats {
+            margin-top: 20px;
+        }
+        .stat {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .logout {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .logout a {
+            color: #d00;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Welcome, {{ stats.username }}</h1>
+        <div class="stats">
+            <div class="stat"><strong>High Score:</strong> {{ stats.high_score }}</div>
+            <div class="stat"><strong>Games Played:</strong> {{ stats.games_played }}</div>
+            <div class="stat"><strong>Win Rate:</strong> {{ stats.win_rate }}%</div>
+            <!-- Add more stats as needed -->
+        </div>
+        <div class="logout">
+            <a href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+    </div>
+</body>
+</html>
