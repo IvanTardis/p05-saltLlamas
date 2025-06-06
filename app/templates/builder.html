@@ -18,8 +18,9 @@
   <!-- Setting Start Date -->
   <form action="{{ url_for('builder') }}" method="POST">
           <label for="events" class="form-label">Choose Journey's Start Date</label>
-          <input type="date" class="form-control" id="startDate" name="startDate" placeholder={{ startDate }} required>
+          <input type="date" class="form-control" id="startDate" name="startDate" required>
       </div>
+      <h6>This is your current starting date: {{ startDate }}</h6>
       <button type="submit" class="btn btn-success btn-lg">Set Date</button>
   </form>
 
@@ -33,9 +34,9 @@
       <button type="submit" class="btn btn-success btn-lg">Change destination</button>
   </form>
 
-  <p>
+  <!-- <p>
     {{ path }}
-  </p>
+  </p> -->
 
 
   <!-- Change Trail Distance -->
@@ -64,7 +65,7 @@
       <button type="submit" class="btn btn-success btn-lg">Add character</button>
   </form>
 
-  <p> {{ characters }} </p>
+  <!-- <p> {{ characters }} </p> -->
 
 
   <!-- Creating monuments along the journey -->
@@ -139,7 +140,7 @@
   </form>
 
 
-  <p>
+  <!-- <p>
     {{ game }}
-  </p>
+  </p> -->
 {% endblock %}
