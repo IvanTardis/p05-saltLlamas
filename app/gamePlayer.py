@@ -416,43 +416,40 @@ def check_mountains():
 def check_illness():
     msgs = []
     st = game_state
-    # Skip illness if already in blizzard or injured
     if st["blizzard_flag"] or st["injury_flag"]:
         return []
 
     roll = random.randint(1, 100)
-    # Only a 5% chance of any illness event
-    if roll <= 5:
-        # Determine type of illness: wild (30% of illness cases) vs. bad (70%)
-        if random.random() < 0.3:
-            cost = 2
-            label = "WILD ILLNESS — MEDICINE USED"
-        else:
-            cost = 5
-            label = "BAD ILLNESS — MEDICINE USED"
-
-        msgs.append(label)
+    if roll < 5:
+        # Wild illness (5% chance)
+        msgs.append("WILD ILLNESS — MEDICINE USED")
         st["distance"] = max(0, st["distance"] - 5)
 
-        if st["misc"] >= cost:
-            st["misc"] -= cost
-            msgs.append(f"Used {cost} misc kits—everyone recovers.")
+        if st["misc"] >= 1:
+            # If we have at least one misc kit, use it and no one dies
+            st["misc"] -= 1
+            msgs.append("Used 1 misc kit; no one died.")
         else:
-            # Not enough misc, one person dies
+            # Not enough misc → pick a victim and kill them
             victim = _pick_victim()
             msgs.append(f"{victim} died of illness.")
-            st["survivors"] = max(0, st["survivors"] - 1)
+            st["survivors"] -= 1
+
+    elif roll < 10:
+        # Bad illness (another 5% window, i.e. 5%–9%)
+        msgs.append("BAD ILLNESS — MEDICINE USED")
+        st["distance"] = max(0, st["distance"] - 5)
+
+        if st["misc"] >= 2:
+            # If we have at least 2 misc kits, use them; no death
+            st["misc"] -= 2
+            msgs.append("Used 2 misc kits; no one died.")
+        else:
+            victim = _pick_victim()
+            msgs.append(f"{victim} died of illness.")
+            st["survivors"] -= 1
 
     return msgs
-
-def _pick_victim():
-    party = []
-    if game_state["party_name"]:
-        party.append(game_state["party_name"])
-    party.extend(game_state["companions"])
-    return random.choice(party) if party else "A party member"
-
-
 
 def _pick_victim():
     party = []
@@ -485,23 +482,30 @@ def travel_turn():
     st["prev_distance"] = st["distance"]
     st["distance"] += miles
     msgs.append(f"You traveled {miles} miles down the trail.")
-    cost_food = st["survivors"] * 2
-    st["food"] = max(0, st["food"] - cost_food)
-    msgs.append(f"You consumed {cost_food} lbs of food.")
-    st["days_on_trail"] += 1
-    st["fort_option_flag"] = True
-    if st["food"] >= 13:
+
+    # ——— FIXED: Only one food deduction per turn ———
+    if st["food"] >= 18:
         st["food"] -= 18
         bonus = int((1 - ((TOTAL_TRAIL - st["distance"]) / TOTAL_TRAIL)) *
                     (8 + (st["oxen_spent"] - 220) / 5 + random.randint(0, 9)))
         st["distance"] += max(0, bonus)
         msgs.append(f"You ate a moderate meal (−18 food) and gained a {bonus}-mile bonus from healthy oxen.")
+    else:
+        cost_food = st["survivors"] * 2
+        actual = min(cost_food, st["food"])
+        st["food"] = max(0, st["food"] - actual)
+        msgs.append(f"You consumed {actual} lbs of food.")
+
+    st["days_on_trail"] += 1
+    st["fort_option_flag"] = True
+
     st["event_counter"] += 1
     if st["event_counter"] >= 1:
         ev_msgs = random_event()
         if ev_msgs:
             msgs.extend(ev_msgs)
         st["event_counter"] = 0
+
     msgs.extend(check_mountains())
     msgs.extend(check_illness())
     msgs.extend(check_end_conditions())
@@ -513,6 +517,7 @@ def hunt_turn():
     if st["bullets"] <= 0:
         msgs.append("TOUGH — YOU NEED MORE BULLETS TO GO HUNTING.")
         return msgs
+
     st["days_on_trail"] += 1
     prey_quality = random.randint(1, 5)
     if prey_quality == 1:
@@ -529,18 +534,27 @@ def hunt_turn():
         cost_bullets = random.randint(10, 14)
         st["bullets"] = max(0, st["bullets"] - cost_bullets)
         msgs.append(f"BIG SHOT! You gained {gained} food and used {cost_bullets} bullets.")
-    if st["food"] >= 13:
+
+    # ——— FIXED: Only one food deduction per turn ———
+    if st["food"] >= 18:
         st["food"] -= 18
         bonus = int((1 - ((TOTAL_TRAIL - st["distance"]) / TOTAL_TRAIL)) *
                     (8 + (st["oxen_spent"] - 220) / 5 + random.randint(0, 9)))
         st["distance"] += max(0, bonus)
         msgs.append(f"You ate a moderate meal (−18 food) and gained a {bonus}-mile bonus.")
+    else:
+        cost_food = st["survivors"] * 2
+        actual = min(cost_food, st["food"])
+        st["food"] = max(0, st["food"] - actual)
+        msgs.append(f"You consumed {actual} lbs of food while hunting.")
+
     st["event_counter"] += 1
     if st["event_counter"] >= 1:
         ev_msgs = random_event()
         if ev_msgs:
             msgs.extend(ev_msgs)
         st["event_counter"] = 0
+
     msgs.extend(check_mountains())
     msgs.extend(check_illness())
     msgs.extend(check_end_conditions())
@@ -550,21 +564,27 @@ def rest_turn():
     msgs = []
     st = game_state
     st["days_on_trail"] += 1
-    cost_food = st["survivors"] * 1
-    st["food"] = max(0, st["food"] - cost_food)
-    msgs.append(f"You rested for a day and used {cost_food} food.")
-    if st["food"] >= 13:
+
+    # ——— FIXED: Only one food deduction per turn ———
+    if st["food"] >= 18:
         st["food"] -= 18
         bonus = int((1 - ((TOTAL_TRAIL - st["distance"]) / TOTAL_TRAIL)) *
                     (8 + (st["oxen_spent"] - 220) / 5 + random.randint(0, 9)))
         st["distance"] += max(0, bonus)
         msgs.append(f"You ate a moderate meal (−18 food) and gained a {bonus}-mile bonus.")
+    else:
+        cost_food = st["survivors"] * 1
+        actual = min(cost_food, st["food"])
+        st["food"] = max(0, st["food"] - actual)
+        msgs.append(f"You rested for a day and used {actual} lbs of food.")
+
     st["event_counter"] += 1
     if st["event_counter"] >= 1:
         ev_msgs = random_event()
         if ev_msgs:
             msgs.extend(ev_msgs)
         st["event_counter"] = 0
+
     msgs.extend(check_mountains())
     msgs.extend(check_illness())
     msgs.extend(check_end_conditions())
@@ -576,21 +596,27 @@ def fort_turn():
     msgs.append("You arrive at the next fort.")
     msgs.append("No purchases at the Fort (placeholder logic).")
     st["days_on_trail"] += 1
-    cost_food = st["survivors"] * 1
-    st["food"] = max(0, st["food"] - cost_food)
-    msgs.append(f"Used {cost_food} food while at the fort.")
-    if st["food"] >= 13:
+
+    # ——— FIXED: Only one food deduction per turn ———
+    if st["food"] >= 18:
         st["food"] -= 18
         bonus = int((1 - ((TOTAL_TRAIL - st["distance"]) / TOTAL_TRAIL)) *
                     (8 + (st["oxen_spent"] - 220) / 5 + random.randint(0, 9)))
         st["distance"] += max(0, bonus)
         msgs.append(f"You ate a moderate meal (−18 food) and gained a {bonus}-mile bonus.")
+    else:
+        cost_food = st["survivors"] * 1
+        actual = min(cost_food, st["food"])
+        st["food"] = max(0, st["food"] - actual)
+        msgs.append(f"Used {actual} lbs of food while at the fort.")
+
     st["event_counter"] += 1
     if st["event_counter"] >= 1:
         ev_msgs = random_event()
         if ev_msgs:
             msgs.extend(ev_msgs)
         st["event_counter"] = 0
+
     msgs.extend(check_mountains())
     msgs.extend(check_illness())
     msgs.extend(check_end_conditions())
