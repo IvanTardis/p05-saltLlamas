@@ -23,7 +23,7 @@ const positions = layers.map(() => ({ x1: 0, x2: BASE_WIDTH }));
 
 const menuButtons = [
     { text: "Play", y: 140, path: "/play" },
-    { text: "Login", y: 210, path: "/login" },
+    { text: "Account", y: 210, path: "/profile" },
     { text: "Game Builder", y: 280, path: "/builder" },
     { text: "Customize Background", y: 350, action: "openCustomize" }
 ];

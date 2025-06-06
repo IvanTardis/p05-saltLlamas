@@ -65,6 +65,10 @@ def register():
 
 @app.route("/builder", methods=['GET', 'POST'])
 def builder():
+    if "user_id" not in session:
+        flash("You must log in to build a game.", "warning")
+        return redirect(url_for("login"))
+
     currEvents = getCurrEvents()
     currPath = getCurrPath()
     currStartDate = getStartDate()
