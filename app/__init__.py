@@ -122,7 +122,10 @@ def builder():
     currPath = getCurrPath()
     currStartDate = getStartDate()
     reseter = request.form.get('reset')
-    update = request.form.get('event')
+    save = request.form.get('save')
+    print("SAVE: " + str(save))
+    update = False
+    # update = request.form.get('event')
     startPoint = request.form.get('start')
     endPoint = request.form.get('end')
     startDate = request.form.get('startDate')
@@ -134,9 +137,8 @@ def builder():
     bonusStat = request.form.get('bonusStat')
     currCharacters = getCharacters()
 
-    monumentName = request.form.get('monumentName')
-    monumentType = request.form.get('monumentType')
-    currMonuments = getMonuments()
+    updateObstacle = request.form.get('obstacleName')
+    currObstacle = getObstacle()
 
     trailLength = request.form.get('trailLength')
     currDist = getDistance()
@@ -160,8 +162,8 @@ def builder():
         elif characterName:
             addCharacter(characterName, description, startingHealth,
                          startingBalance, bonusStat)
-        elif monumentName:
-            addMonument(monumentName, monumentType)
+        elif updateObstacle:
+            changeObstacle(updateObstacle)
         elif backgroundImage:
             addBack(backgroundImage)
         elif midgroundImageOne:
@@ -174,11 +176,14 @@ def builder():
             currDist = changeDistance(trailLength)
         elif changeTitle:
             currTitle = changeTitle(updatedTitle)
+        if save == 'save':
+            print("\n\n\nSAVING INIT\n\n\n\n")
+            saveWork(session['user'])
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
-        characters=currCharacters, monuments=currMonuments, game=fullGame,
-        trailLength=updatedTitle, currTitle=currTitle)
+        characters=currCharacters, game=fullGame,
+        trailLength=currDist, currTitle=currTitle)
 
     return render_template(
         'builder.html',
