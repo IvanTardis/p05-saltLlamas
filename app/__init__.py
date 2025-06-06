@@ -325,6 +325,7 @@ def upload_image():
         flash("Invalid Image Format", "danger")
     updateImagePath(user_id, image_path, column_map[image_type])
     flash("Image uploaded.","success")
+
 if __name__ == "__main__":
     app.debug = True
     app.run()
