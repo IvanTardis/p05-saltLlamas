@@ -25,6 +25,7 @@ app.secret_key = os.urandom(32)
 
 build()
 
+"""
 @app.route("/", methods=['GET', 'POST'])
 def home():
     logged_in = "NOT LOGGED IN"
@@ -41,8 +42,9 @@ def home():
     return render_template('home.html',
         test = logged_in
     )
+"""
 
-"""
+
 @app.route("/", methods=['GET', 'POST'])
 def home():
     logged_in = "NOT LOGGED IN"
@@ -53,25 +55,33 @@ def home():
         midground1_path = getMidgroundImageOnePath(user_id)
         midground2_path = getMidgroundImageTwoPath(user_id)
         wagon_path = getWagonImagePath(user_id)
+        if not background_path:
+            background_path = "../static/images/layer-5.png"
+        if not midground1_path:
+            midground1_path = "../static/images/layer-1.png"
+        if not midground2_path:
+            midground2_path = "../static/images/layer-2.png"
+        if not wagon_path:
+            wagon_path = "../static/images/layer-6.png"
+
         return render_template('home.html',
-            image1 = midground1_path,
-            image2 = midground2_path,
-            image3 = "../static/images/layer-6.png",
-            image4 = "../static/images/layer-4.png",
-            image5 = background_path,
-            image6 = wagon_path,
-            test = logged_in
+            image1=midground1_path,
+            image2=midground2_path,
+            image3="../static/images/layer-6.png",
+            image4="../static/images/layer-4.png",
+            image5=background_path,
+            image6=wagon_path,
+            test=logged_in
         )
     return render_template('home.html',
-        image1 = "../static/images/layer-1.png",
-        image2 = "../static/images/layer-2.png",
-        image3 = "../static/images/layer-3.png",
-        image4 = "../static/images/layer-4.png",
-        image5 = "../static/images/layer-5.png",
-        image6 = "../static/images/layer-6.png",
-        test = logged_in
+        image1="../static/images/layer-1.png",
+        image2="../static/images/layer-2.png",
+        image3="../static/images/layer-3.png",
+        image4="../static/images/layer-4.png",
+        image5="../static/images/layer-5.png",
+        image6="../static/images/layer-6.png",
+        test=logged_in
     )
-"""
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -121,7 +131,10 @@ def builder():
     currPath = getCurrPath()
     currStartDate = getStartDate()
     reseter = request.form.get('reset')
-    update = request.form.get('event')
+    save = request.form.get('save')
+    print("SAVE: " + str(save))
+    update = False
+    # update = request.form.get('event')
     startPoint = request.form.get('start')
     endPoint = request.form.get('end')
     startDate = request.form.get('startDate')
@@ -133,9 +146,8 @@ def builder():
     bonusStat = request.form.get('bonusStat')
     currCharacters = getCharacters()
 
-    monumentName = request.form.get('monumentName')
-    monumentType = request.form.get('monumentType')
-    currMonuments = getMonuments()
+    updateObstacle = request.form.get('obstacleName')
+    currObstacle = getObstacle()
 
     trailLength = request.form.get('trailLength')
     currDist = getDistance()
@@ -159,8 +171,8 @@ def builder():
         elif characterName:
             addCharacter(characterName, description, startingHealth,
                          startingBalance, bonusStat)
-        elif monumentName:
-            addMonument(monumentName, monumentType)
+        elif updateObstacle:
+            changeObstacle(updateObstacle)
         elif backgroundImage:
             addBack(backgroundImage)
         elif midgroundImageOne:
@@ -173,11 +185,9 @@ def builder():
             currDist = changeDistance(trailLength)
         elif changeTitle:
             currTitle = changeTitle(updatedTitle)
-
-    return render_template('builder.html', events=currEvents, path=currPath,
-        startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
-        characters=currCharacters, monuments=currMonuments, game=fullGame,
-        trailLength=updatedTitle, currTitle=currTitle)
+        if save == 'save':
+            print("\n\n\nSAVING INIT\n\n\n\n")
+            saveWork(session['user'])
 
     return render_template(
         'builder.html',
@@ -187,9 +197,10 @@ def builder():
         endPoint=currPath[1],
         startDate=currStartDate,
         characters=currCharacters,
-        monuments=currMonuments,
-        game=fullGame
-    )
+        game=fullGame,
+        trailLength=currDist,
+        currTitle=currTitle)
+
 @app.route("/setup", methods=["GET", "POST"])
 def setup():
     """

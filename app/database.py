@@ -1,5 +1,6 @@
 import sqlite3
 import random
+import json
 
 # Database Initialization
 def build():
@@ -18,6 +19,17 @@ def build():
         midgroundImageOnePath TEXT,
         midgroundImageTwoPath TEXT,
         wagonImagePath TEXT
+    )
+    """)
+
+    #Create games dictionary table
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS user_games (
+        gameID INTEGER PRIMARY KEY AUTOINCREMENT,
+        userID INTEGER,
+        gameName TEXT,
+        gameData TEXT,
+        FOREIGN KEY (userID) REFERENCES users(userID)
     )
     """)
 
@@ -171,15 +183,54 @@ def getWagonImagePath(user_id):
     close(db)
     return wagon_image_path[0] if wagon_image_path else 0
 
+def save_user_game(user_id, game_name, game_dict):
+    """
+    Save a game dictionary under a specific name for a user.
+    """
+    c, db = connect()
+    json_data = json.dumps(game_dict)
+    c.execute("""
+        INSERT INTO user_games (userID, gameName, gameData)
+        VALUES (?, ?, ?)
+    """, (user_id, game_name, json_data))
+    db.commit()
+    close(db)
+
+def get_user_games(user_id):
+    """
+    Get all saved games for a user as a list of dictionaries.
+    """
+    c, db = connect()
+    results = c.execute("""
+        SELECT gameID, gameName, gameData FROM user_games
+        WHERE userID = ?
+    """, (user_id,)).fetchall()
+    close(db)
+    return [
+        {"gameID": row[0], "gameName": row[1], "gameData": json.loads(row[2])}
+        for row in results
+    ]
+
+def get_single_user_game(user_id, game_id):
+    """
+    Retrieve a single game by its ID.
+    """
+    c, db = connect()
+    row = c.execute("""
+        SELECT gameData FROM user_games WHERE userID = ? AND gameID = ?
+    """, (user_id, game_id)).fetchone()
+    close(db)
+    return json.loads(row[0]) if row else None
+
 db = sqlite3.connect("rest.db")
 c = db.cursor()
 
-print("== Users Table ==")
-c.execute("PRAGMA table_info(users)")
-print(c.fetchall())
-
-print("\n== Stats Table ==")
-c.execute("PRAGMA table_info(stats)")
-print(c.fetchall())
+# print("== Users Table ==")
+# c.execute("PRAGMA table_info(users)")
+# print(c.fetchall())
+#
+# print("\n== Stats Table ==")
+# c.execute("PRAGMA table_info(stats)")
+# print(c.fetchall())
 
 db.close()

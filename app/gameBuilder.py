@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+from database import *
 
 import sqlite3
 import os
 
 baseGame = {
+    "title": "",
     "startDate": 0,
     "currPath": [None] * 2,
     "distance": 0,
@@ -34,9 +36,7 @@ baseGame = {
             }
         }
     },
-    "monuments": {
-
-    },
+    "obstacle": "",
     "weather": "",
     "prey": ""
 }
@@ -61,11 +61,12 @@ currImages = [None]*4
 # currPath = [None] * 2
 
 def getTitle():
-    return currTitle
+    return currGame.get('title')
 
 def changeTitle(input):
-    currTitle = input
-    return currTitle
+    print("\n\n\nChanging Title\n\n\n")
+    currGame['title'] = input
+    return input
 
 def getDistance():
     return currGame.get("distance")
@@ -86,13 +87,11 @@ def addMidTwo(input):
 def addFore(input):
     currImages[3] = input
 
-def addMonument(name, type):
-    temp = baseMonument.copy()
-    temp['type'] = type
-    currGame["monuments"][name] = temp
+def changeObstacle(name):
+    currGame['obstacle'] = name
 
-def getMonuments():
-    return currGame.get("monuments")
+def getObstacle():
+    return currGame.get("obstacle")
 
 def addCharacter(name, description, health, money, bonus):
     temp = baseCharacter.copy()
@@ -138,9 +137,13 @@ def changePath(start, end):
 def getGame():
     return currGame
 
-def saveWork():
-    return 0
+def saveWork(usrname):
+    print("\n\n\nSAVING HERE\n\n\n\n")
+    save_user_game(usrname, currGame.get('title'), currGame)
+    currGame.clear()
+    currGame = baseGame.copy()
+
 
 def reset():
-    currEvents.clear()
+    currGame.clear()
     # print("Here: " + currEvents)
