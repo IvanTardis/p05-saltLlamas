@@ -251,6 +251,29 @@ function handleCanvasClick() {
     }
 }
 
+function preloadImagesThenAnimate() {
+    let loaded = 0;
+
+    layers.forEach(layer => {
+        const img = layer.img;
+
+        if (img.complete) {
+            loaded++;
+        } else {
+            img.onload = () => {
+                loaded++;
+                if (loaded === layers.length) {
+                    animate();
+                }
+            };
+        }
+    });
+
+    if (loaded === layers.length) {
+        animate();
+    }
+}
+
 canvas.addEventListener('mousemove', (e) => {<input type="file" id="file-input" accept="image/*"></input>
     const rect = canvas.getBoundingClientRect();
     mouse.x = (e.clientX - rect.left) / scaleFactor;
@@ -262,4 +285,4 @@ fileInput.addEventListener('change', handleFileUpload);
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-animate();
+preloadImagesThenAnimate();
