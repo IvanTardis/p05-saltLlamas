@@ -85,11 +85,19 @@ ivanG -- 2025-05-29 11:46
 - Hoping to get a base game integrated with the play feature soon
 
 ivanG -- 2025-05-30
-- Continued with customization features
-- Users can change the start date of their journeys
-- Other general bug fixing
+- Fixed functionality bugs that impeded running
+- Tried to (failed) to update gitignore for __pycache__
+- Added startdate to user's ability to customize, and other features
 
 ivanG -- 2025-06-02
-- Continued adding customization
-- User can add base characters
-- Monuments with different kinds added to custom
+- Updated user adding characters feature to game builder
+- Customization can now include monuments that effect gameplay
+- debugging typa-thing to be able to see full game dictionary
+
+ivanG -- 2025-06-03
+- Mostly working on how to upload images to the page
+- Did research on ways to save the image to a folder
+
+ivanG -- 2025-06-04
+- Allow user to add distance they want to be travelled for their journey
+- Added save button to be used for publishing the users' game when ready

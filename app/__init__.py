@@ -25,7 +25,10 @@ build()
 # Routes
 @app.route(("/"), methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
+    test = "LOGGED IN"
+    if "user_id" not in session:
+        test = "NOT LOGGED IN"
+    return render_template('home.html', test=test)
 
 
 @app.route(("/login"), methods=['GET', 'POST'])
@@ -62,6 +65,10 @@ def register():
 
 @app.route("/builder", methods=['GET', 'POST'])
 def builder():
+    if "user_id" not in session:
+        flash("You must log in to build a game.", "warning")
+        return redirect(url_for("login"))
+
     currEvents = getCurrEvents()
     currPath = getCurrPath()
     currStartDate = getStartDate()
@@ -81,6 +88,9 @@ def builder():
     monumentName = request.form.get('monumentName')
     monumentType = request.form.get('monumentType')
     currMonuments = getMonuments()
+
+    trailLength = request.form.get('trailLength')
+    currDist = getDistance()
 
     backgroundImage = request.form.get('backgroundImage')
     midgroundImageOne = request.form.get('midgroundImageOne')
@@ -112,10 +122,13 @@ def builder():
             addBack(midgroundImageTwo)
         elif foregroundImage:
             addBack(foregroundImage)
+        elif trailLength:
+            currDist = changeDistance(trailLength)
 
     return render_template('builder.html', events=currEvents, path=currPath,
         startPoint=currPath[0], endPoint=currPath[1], startDate=currStartDate,
-        characters=currCharacters, monuments=currMonuments, game=fullGame)
+        characters=currCharacters, monuments=currMonuments, game=fullGame,
+        trailLength=currDist)
 
 
 @app.route("/setup", methods=["GET", "POST"])
